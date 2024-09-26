@@ -907,7 +907,7 @@ select.list-dt:focus {
 
 #instruction {
   position: absolute;
-  top: 80%;
+  top: 78%;
   left: 50%;
   transform: translateX(-50%);
   font-size: 0.8em;

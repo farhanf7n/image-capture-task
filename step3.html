@@ -68,18 +68,18 @@
                                             <i class="fa fa-check-square-o" aria-hidden="true"></i>
                                         </div>
                                     </li>
-                                    <li class="active" id="document"><strong>ID Card Back</strong>
+                                    <li class="active relative" id="document"><strong>ID Card Back</strong>
                                         <div class="check-icon d-none">
                                             <i class="fa fa-check-square-o" aria-hidden="true"></i>
                                         </div>
                                     </li>
-                                    <li class="active" id="selfie"><strong>Selfie</strong>
+                                    <li class="active relative" id="selfie"><strong>Selfie</strong>
                                         <div class="check-icon d-none">
                                             <i class="fa fa-check-square-o" aria-hidden="true"></i>
                                         </div>
                                     </li>
 
-                                    <li id="confirm"><strong>Fingerprint</strong>
+                                    <li class="active relative" id="confirm"><strong>Fingerprint</strong>
                                         <div class="check-icon d-none">
                                             <i class="fa fa-check-square-o" aria-hidden="true"></i>
                                         </div>
@@ -101,7 +101,8 @@
                                     </div>
                                     <button class="btn btn-danger btn-sm mt-2" id="retakeBtn" style="display:none"
                                         onclick="window.location.reload();">Retake</button>
-                                    <a class="btn btn-primary btn-sm mt-2" style="display:none" id="next_btn">Next
+                                    <a class="btn btn-primary btn-sm mt-2"
+                                        style="display:none; color: white; cursor: pointer;" id="next_btn">Next
                                         Step</a>
                                 </fieldset>
                                 <script>
@@ -189,9 +190,18 @@
 
                                         })
                                     }
-                                    $('#next_btn').on('click', function () {
-                                        callajaxt();
-                                    })
+                                    $("#next_btn").on("click", function () {
+                                        // Show the check icon for Selfie
+                                        $('#progressbar li:nth-child(3) .check-icon').removeClass('d-none');
+
+                                        // Save the progress in localStorage
+                                        localStorage.setItem('step3Completed', 'true');
+
+                                        // Redirect to step4.html after a short delay to allow the check icon to be visible
+                                        setTimeout(function () {
+                                            window.location.href = "step4.html";
+                                        }, 300); // 300ms delay, adjust if needed
+                                    });
 
                                     function startRecording() {
                                         if (mediaRecorder && mediaRecorder.state === 'inactive') {
