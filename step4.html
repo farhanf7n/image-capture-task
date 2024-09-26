@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Step - 4</title>
+    <!-- Bootstrap css  -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <!-- Font awesome css  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css">
+
+    <!-- Custom css -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.8);
+            /* Makes the overlay darker */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        /*Background color*/
+        #grad1 {
+            background: lightgrey;
+            background-image: linear-gradient(120deg, #FF4081, #81D4FA);
+        }
+
+        /*form styles*/
+        #msform {
+            text-align: center;
+            position: relative;
+            margin-top: 20px;
+        }
+
+        .previewContainer img {
+            /* width: 250px !important; */
+            width: 100% !important;
+            /* height: 300px !important; */
+        }
+
+        #msform fieldset .form-card {
+            background: white;
+            border: 0 none;
+            border-radius: 10px;
+            border: 1px solid rgb(100, 100, 100);
+            box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.2);
+            padding: 20px 40px 30px 40px;
+            box-sizing: border-box;
+            width: 94%;
+            margin: 0 3% 20px 3%;
+
+            /*stacking fieldsets above each other*/
+            position: relative;
+        }
+
+        #msform fieldset {
+            background: white;
+            border: 0 none;
+            border-radius: 0.5rem;
+            box-sizing: border-box;
+            width: 100%;
+            margin: 0;
+            /* padding-bottom: 20px; */
+
+            /*stacking fieldsets above each other*/
+            position: relative;
+        }
+
+        /*Hide all except first fieldset*/
+        #msform fieldset:not(:first-of-type) {
+            display: none;
+        }
+
+        #msform fieldset .form-card {
+            text-align: left;
+            color: #9E9E9E;
+        }
+
+        #msform input,
+        #msform textarea {
+            padding: 0px 8px 4px 8px;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            border-radius: 0px;
+            margin-bottom: 25px;
+            margin-top: 2px;
+            width: 100%;
+            box-sizing: border-box;
+            font-family: montserrat;
+            color: #2C3E50;
+            font-size: 16px;
+            letter-spacing: 1px;
+        }
+
+        #msform input:focus,
+        #msform textarea:focus {
+            -moz-box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+            border: none;
+            font-weight: bold;
+            border-bottom: 2px solid skyblue;
+            outline-width: 0;
+        }
+
+        /*Blue Buttons*/
+        #msform .action-button {
+            width: 100px;
+            background: skyblue;
+            font-weight: bold;
+            color: white;
+            border: 0 none;
+            border-radius: 0px;
+            cursor: pointer;
+            padding: 10px 5px;
+            margin: 10px 5px;
+        }
+
+        #msform .action-button:hover,
+        #msform .action-button:focus {
+            box-shadow: 0 0 0 2px white, 0 0 0 3px skyblue;
+        }
+
+        /*Previous Buttons*/
+        #msform .action-button-previous {
+            width: 100px;
+            background: #616161;
+            font-weight: bold;
+            color: white;
+            border: 0 none;
+            border-radius: 0px;
+            cursor: pointer;
+            padding: 10px 5px;
+            margin: 10px 5px;
+        }
+
+        #msform .action-button-previous:hover,
+        #msform .action-button-previous:focus {
+            box-shadow: 0 0 0 2px white, 0 0 0 3px #616161;
+        }
+
+        /*Dropdown List Exp Date*/
+        select.list-dt {
+            border: none;
+            outline: 0;
+            border-bottom: 1px solid #ccc;
+            padding: 2px 5px 3px 5px;
+            margin: 2px;
+        }
+
+        select.list-dt:focus {
+            border-bottom: 2px solid skyblue;
+        }
+
+        /*The background card*/
+        .card {
+            z-index: 0;
+            border: none;
+            border-radius: 0.5rem;
+            position: relative;
+            /* border: 1px solid rgb(100, 100, 100) */
+        }
+
+        .card h2 {
+            margin-top: -12px;
+        }
+
+        /*FieldSet headings*/
+        .fs-title {
+            font-size: 25px;
+            color: #2C3E50;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        /*progressbar*/
+        #progressbar {
+            margin-bottom: 16px;
+            overflow: hidden;
+            color: lightgrey;
+            margin-top: -23px;
+        }
+
+        #progressbar .active {
+            color: #000000;
+        }
+
+        #progressbar li {
+            list-style-type: none;
+            font-size: 12px;
+            width: 25%;
+            float: left;
+            position: relative;
+        }
+
+        /*Icons in the ProgressBar*/
+        #progressbar #document:before {
+            font-family: FontAwesome;
+            content: "\f023";
+        }
+
+        #progressbar #selfie:before {
+            font-family: FontAwesome;
+            content: "\f007";
+        }
+
+        #progressbar #fingerprint:before {
+            font-family: FontAwesome;
+            content: "\f09d";
+        }
+
+        #progressbar #confirm:before {
+            font-family: FontAwesome;
+            content: "\f00c";
+        }
+
+        /*ProgressBar before any progress*/
+        #progressbar li:before {
+            width: 50px;
+            height: 50px;
+            line-height: 45px;
+            display: block;
+            font-size: 18px;
+            color: #ffffff;
+            background: lightgray;
+            border-radius: 50%;
+            margin: 0 auto 10px auto;
+            padding: 2px;
+        }
+
+        /*ProgressBar connectors*/
+        #progressbar li:after {
+            content: '';
+            width: 100%;
+            height: 2px;
+            background: lightgray;
+            position: absolute;
+            left: 0;
+            top: 25px;
+            z-index: -1;
+        }
+
+        /*Color number of the step and the connector before it*/
+        #progressbar li.active:before,
+        #progressbar li.active:after {
+            background: skyblue;
+        }
+
+        /*Imaged Radio Buttons*/
+        .radio-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .radio {
+            display: inline-block;
+            width: 204;
+            height: 104;
+            border-radius: 0;
+            background: lightblue;
+            box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
+            cursor: pointer;
+            margin: 8px 2px;
+        }
+
+        .radio:hover {
+            box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .radio.selected {
+            box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        /*Fit image in bootstrap div*/
+        .fit-image {
+            width: 100%;
+            object-fit: cover;
+        }
+
+        #cameraContainer {
+            position: relative;
+            /* width: 300px; */
+            width: auto;
+            /* Adjust according to your layout */
+            /* height: 200px; */
+            height: auto;
+            /* Adjust according to your layout */
+        }
+
+        #videoFeed {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .btn-sm {
+            font-size: 12px
+        }
+
+        #captureButton {
+            position: absolute;
+            bottom: -24px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 13px;
+        }
+
+        .retake_btn {
+            display: flex;
+            justify-content: center;
+            align-content: center;
+        }
+
+        #retakebutton {
+            margin-right: 3px;
+        }
+
+        #next_step {
+            margin-left: 3px;
+        }
+
+        #loader {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            /* Semi-transparent background */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            /* Ensure it's on top of all other elements */
+        }
+
+        .spinner {
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #3498db;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        #content {
+            /* Hide content until loader is removed */
+            display: none;
+        }
+
+        @media only screen and (max-width: 426px) {
+            .card h2 {
+                font-size: 20px;
+            }
+
+            .card p {
+                font-size: 12px
+            }
+
+            .form-card h4 {
+                font-size: 20px
+            }
+        }
+
+        @media only screen and (max-width: 376px) {
+            .card h2 {
+                font-size: 20px;
+            }
+
+            .card p {
+                font-size: 12px
+            }
+
+            .form-card h4 {
+                font-size: 17px
+            }
+        }
+
+        @media only screen and (max-width: 321px) {
+            .card h2 {
+                font-size: 20px;
+            }
+
+            .card p {
+                font-size: 10px
+            }
+
+            .form-card h4 {
+                font-size: 14px
+            }
+
+            #captureButton {
+                font-size: 11px
+            }
+        }
+    </style>
+    <meta name="csrf-token" content="">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src=""></script>
+
+</head>
+
+<body>
+    <div id="loader">
+        <div class="spinner"></div>
+        <p>Loading..</p>
+    </div>
+    <!-- MultiStep Form -->
+    <div class="container d-flex align-items-center" style="height: 100vh" id="">
+        <div class="row justify-content-center mt-0">
+            <div class="col-12 col-sm-9 col-md-7 col-lg-6 text-center p-0 mt-0 mb-0">
+                <div style="
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              height: 100%;
+            ">
+                    <h2 class="barlow-bold text-left" style="font-size: 42px">
+                        Identity Verification
+                    </h2>
+                    <p class="text-left">Please complete all steps to proceed.</p>
+                    <div class="p-2">
+                        <img src="undraw_alert_re_j2op 1.png" alt="" class="img-fluid" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-9 col-md-7 col-lg-6 text-center p-0 mt-0 mb-0">
+                <div class="card px-0 pt-4 pb-0 mt-3 mb-3">
+                    <div class="row">
+                        <div class="col-md-12 mx-0">
+
+                            <form id="msform">
+                                <ul id="progressbar">
+                                    <li id="document"><strong>ID Card Front</strong></li>
+                                    <li id="document"><strong>ID Card Back</strong></li>
+                                    <li id="selfie"><strong>Selfie</strong></li>
+                                    <li class="active" id="confirm"><strong>Fingerprint</strong></li>
+                                </ul>
+                                <fieldset>
+                                    <div class="form-card">
+                                        <h4>Upload Your Fingerprint</h4>
+                                        <p>Upload your fingerprints.please make sure that the document should be clear
+                                            and readable.</p>
+                                        <div id="cameraContainer">
+                                            <video id="videoFeed" autoplay playsinline></video>
+                                            <canvas id="overlayCanvas"></canvas>
+                                            <button id="captureButton" class="btn btn-primary btn-sm">Capture
+                                                Image</button>
+                                        </div>
+                                        <div class="previewContainer" id="previewContainer">
+                                        </div>
+                                        <span class="error" style="color:red" id="error_finger_prints"></span>
+
+                                    </div>
+                                    <button class="btn btn-danger btn-sm mt-2" style="display: none"
+                                        id="retakebutton">Retake</button>
+                                    <a href="{{ route('kyc.step3') }}" name="previous">
+                                        <button class="btn btn-primary btn-sm mt-2" style="display: none"
+                                            id="next_step">Next
+                                            Step</button>
+                                </fieldset>
+                            </form>
+
+
+                            <script>
+                                const video = document.getElementById('videoFeed');
+                                const previewContainer = document.getElementById('previewContainer');
+
+                                const overlayCanvas = document.getElementById('overlayCanvas');
+                                const captureButton = document.getElementById('captureButton');
+                                const overlayCtx = overlayCanvas.getContext('2d');
+
+                                function drawCircles() {
+                                    // Define constants for the camera frame and circle dimensions
+                                    const frameWidth = 300; // Width of the camera frame
+                                    const frameHeight = 200; // Height of the camera frame
+                                    const circleRadius = 20; // Smaller radius for each circle
+                                    const spacing = 10; // Increase spacing between circles
+                                    const topMargin = 15; // Smaller top margin from the edge of the frame
+
+                                    // Calculate the total width of the circles and spacing combined
+                                    const totalWidth = (4 * circleRadius * 2) + (3 * spacing);
+
+                                    // Calculate starting X position to center the circles horizontally
+                                    const startX = (frameWidth - totalWidth) / 2 + circleRadius;
+
+                                    // Adjust the Y positions to simulate finger heights
+                                    const fingerOffsets = {
+                                        thumb: 30, // Thumb will be lower
+                                        index: 0, // Index finger is the highest
+                                        middle: -5, // Middle finger slightly higher than index
+                                        ring: 5, // Ring finger slightly lower than index
+                                        little: 15 // Little finger is the lowest
+                                    };
+
+                                    // Set the size of the overlay canvas to match the camera frame
+                                    overlayCanvas.width = frameWidth;
+                                    overlayCanvas.height = frameHeight;
+
+                                    // Clear the overlay canvas before drawing
+                                    overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+
+                                    // Set styles for the circle outlines
+                                    overlayCtx.strokeStyle = 'red'; // Circle border color
+                                    overlayCtx.lineWidth = 2; // Circle border thickness
+
+                                    // List of finger heights based on the natural shape of the hand
+                                    const yOffsets = [
+                                        topMargin + circleRadius + fingerOffsets.thumb, // Thumb
+                                        topMargin + circleRadius + fingerOffsets.index, // Index finger
+                                        topMargin + circleRadius + fingerOffsets.middle, // Middle finger
+                                        topMargin + circleRadius + fingerOffsets.ring, // Ring finger
+                                        topMargin + circleRadius + fingerOffsets.little // Little finger
+                                    ];
+
+                                    // Draw the circles for each finger
+                                    for (let i = 0; i < 4; i++) {
+                                        // Calculate the X position for each circle based on index and spacing
+                                        const xPosition = startX + i * (2 * circleRadius + spacing);
+
+                                        // Begin drawing the circle
+                                        overlayCtx.beginPath();
+                                        overlayCtx.arc(xPosition, yOffsets[i], circleRadius, 0, Math.PI * 2);
+                                        overlayCtx.stroke(); // Draw the circle border
+                                    }
+                                }
+
+                                drawCircles()
+
+                                function initializeCamera(facingMode) {
+                                    // Access the camera and stream the feed to the video element
+                                    navigator.mediaDevices.getUserMedia({
+                                        video: {
+                                            facingMode: facingMode
+                                        }
+                                    })
+                                        .then(stream => {
+                                            video.srcObject = stream;
+                                        })
+                                        .catch(err => {
+                                            console.error('Error accessing camera:', err);
+                                        });
+                                }
+                                initializeCamera('environment'); // 'environment' for back camera
+
+                                // Capture image when the button is clicked
+                                captureButton.addEventListener('click', () => {
+                                    captureImage();
+                                    // Perform image capture logic here
+                                });
+                                var captured_image;
+
+                                function captureImage() {
+                                    $('#cameraContainer').hide();
+                                    const canvas = document.createElement('canvas'); // Create a temporary canvas
+                                    canvas.width = video.videoWidth; // Set canvas width to video width
+                                    canvas.height = video.videoHeight; // Set canvas height to video height
+                                    const ctx = canvas.getContext('2d');
+
+                                    // Draw the video frame onto the canvas
+                                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                                    const imageDataURL = canvas.toDataURL(); // Get image data as base64 URL
+                                    const img = new Image();
+                                    img.src = imageDataURL;
+                                    captured_image = imageDataURL;
+                                    // Display captured image preview
+                                    previewContainer.innerHTML = '';
+                                    previewContainer.appendChild(img);
+                                    $('#previewContainer').show();
+                                    $('#retakebutton').show();
+                                    $('#next_step').show();
+
+                                }
+                                $('#msform').on('submit', function (e) {
+                                    e.preventDefault();
+                                })
+                                $('#retakebutton').on('click', function (e) {
+                                    e.preventDefault();
+                                    $('#cameraContainer').show();
+                                    $('#previewContainer').hide();
+                                    $(this).hide();
+                                    $('#error_finger_prints').text('');
+
+                                });
+
+                                $('#next_step').on('click', function (e) {
+                                    e.preventDefault();
+                                    uploadFingerprint();
+                                });
+
+
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        $(document).ready(function () {
+            $(".submit").click(function () {
+                return false;
+            })
+            hideLoader();
+        });
+
+        function hideLoader() {
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('msform').style.display = 'block';
+        }
+
+        function showLoader() {
+            document.getElementById('loader').style.display = 'flex';
+            document.getElementById('msform').style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>

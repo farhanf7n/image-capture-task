@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Step - 3</title>
+    <!-- Bootstrap css  -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <!-- Font awesome css  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css">
+
+    <!-- Google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet" />
+
+    <!-- Custom css -->
+    <link rel="stylesheet" href="style.css" />
+
+    <meta name="csrf-token" content="">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src=""></script>
+
+</head>
+
+<body>
+    <div id="loader">
+        <div class="spinner"></div>
+        <p>Loading..</p>
+    </div>
+    <!-- MultiStep Form -->
+    <div class="container d-flex align-items-center" style="height: 100vh" id="">
+        <div class="row justify-content-center mt-0">
+            <div class="col-12 col-sm-9 col-md-7 col-lg-6 text-center p-0 mt-0 mb-0">
+                <div style="
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              height: 100%;
+            ">
+                    <h2 class="barlow-bold text-left" style="font-size: 42px">
+                        Identity Verification
+                    </h2>
+                    <p class="text-left">Please complete all steps to proceed.</p>
+                    <div class="p-2">
+                        <img src="undraw_alert_re_j2op 1.png" alt="" class="img-fluid" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-9 col-md-7 col-lg-6 text-center p-0 mt-0 mb-0">
+                <div class="card px-0 pt-4 pb-0 mt-3 mb-3">
+                    <div class="row">
+                        <div class="col-md-12 mx-0">
+
+                            <form id="msform">
+
+                                <ul id="progressbar">
+                                    <li id="document"><strong>ID Card</strong></li>
+                                    <li id="document"><strong>ID Card</strong></li>
+                                    <li class="active" id="selfie"><strong>Selfie</strong></li>
+
+                                    <li id="confirm"><strong>Fingerprint</strong></li>
+                                </ul>
+                                <fieldset>
+                                    <div class="recording_div">
+                                        <video autoplay muted playsinline id="videoLive"></video>
+                                        <div id="overlay"></div>
+                                        <div id="counter"></div>
+                                        <p id="instruction">Look Straight in Circle</p>
+                                        <div class="animation-arrow left-arrow"></div>
+                                        <div class="animation-arrow right-arrow"></div>
+                                    </div>
+                                    <div id="preview_div" style="display: none">
+                                        {{-- We had recorded your video we are working on it please wait --}}
+                                        <video controls playsinline id="videoRecorded" style="width:100%"></video>
+                                    </div>
+                                    <button class="btn btn-danger btn-sm mt-2" id="retakeBtn" style="display:none"
+                                        onclick="window.location.reload();">Retake</button>
+                                    <a class="btn btn-primary btn-sm mt-2" style="display:none" id="next_btn">Next
+                                        Step</a>
+                                </fieldset>
+                                <script>
+                                    let mediaRecorder;
+                                    var videoData;
+                                    async function main() {
+
+                                        const videoLive = document.getElementById('videoLive');
+                                        const overlay = document.getElementById('overlay');
+                                        const counter = document.getElementById('counter');
+                                        const instruction = document.getElementById('instruction');
+                                        const leftArrow = document.querySelector('.left-arrow');
+                                        const rightArrow = document.querySelector('.right-arrow');
+                                        let chunks = [];
+                                        let countdownInterval;
+                                        let countdownSeconds = 4;
+                                        const stream = await navigator.mediaDevices.getUserMedia({ // <1>
+                                            video: true,
+                                            audio: true,
+                                        })
+
+                                        videoLive.srcObject = stream
+
+                                        if (!MediaRecorder.isTypeSupported('video/webm')) { // <2>
+                                            mediaRecorder = new MediaRecorder(stream, { // <3>
+                                                mimeType: 'video/mp4',
+
+                                            })
+                                        } else {
+                                            mediaRecorder = new MediaRecorder(stream, { // <3>
+                                                mimeType: 'video/webm',
+                                            })
+                                        }
+
+                                        // mediaRecorder = new MediaRecorder(stream, { // <3>
+                                        //     mimeType: 'video/webm',
+                                        // })
+                                        countdownInterval = setInterval(() => {
+                                            countdownSeconds--;
+                                            if (countdownSeconds >= 0) {
+                                                counter.textContent = countdownSeconds;
+                                            } else {
+                                                counter.textContent = '';
+                                                startRecording();
+                                                // overlay.style.display = 'none';
+                                                instruction.style.display = 'block';
+                                                leftArrow.style.display = 'block';
+                                                rightArrow.style.display = 'block';
+
+                                                setTimeout(() => {
+                                                    instruction.textContent = 'Look Straight in Circle';
+                                                    leftArrow.style.display = 'none';
+                                                    rightArrow.style.display = 'none';
+                                                }, 1000); // Display "Straight" instruction after 1 second
+
+                                                setTimeout(() => {
+                                                    instruction.textContent = 'Move your face to the left';
+                                                    leftArrow.style.display = 'block';
+                                                }, 2000); // Display "Move your face to the left" instruction after 2 seconds
+
+                                                setTimeout(() => {
+                                                    instruction.textContent = 'Move your face to the right';
+                                                    leftArrow.style.display = 'none';
+                                                    rightArrow.style.display = 'block';
+                                                }, 4000); // Display "Move your face to the right" instruction after 4 seconds
+
+                                                setTimeout(() => {
+                                                    instruction.textContent = '';
+                                                    leftArrow.style.display = 'none';
+                                                    rightArrow.style.display = 'none';
+                                                    stopRecording();
+                                                }, 6000); // Stop recording after 6 seconds
+
+                                                clearInterval(countdownInterval);
+                                            }
+                                        }, 1000); // Countdown interval every 1 second
+
+
+                                        mediaRecorder.addEventListener('dataavailable', event => {
+                                            videoRecorded.src = URL.createObjectURL(event.data) // <6>
+                                            videoData = event.data;
+                                            $('#next_btn').show();
+                                            $('#retakeBtn').show();
+
+
+                                        })
+                                    }
+                                    $('#next_btn').on('click', function () {
+                                        callajaxt();
+                                    })
+
+                                    function startRecording() {
+                                        if (mediaRecorder && mediaRecorder.state === 'inactive') {
+                                            mediaRecorder.start();
+                                        }
+                                    }
+
+                                    function stopRecording() {
+                                        if (mediaRecorder && mediaRecorder.state === 'recording') {
+                                            mediaRecorder.stop();
+                                            $('.recording_div').hide();
+                                            $('#preview_div').show();
+                                        }
+                                    }
+
+
+                                    main()
+                                </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        $(document).ready(function () {
+            $(".submit").click(function () {
+                return false;
+            })
+            hideLoader();
+        });
+
+        function hideLoader() {
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('msform').style.display = 'block';
+        }
+
+        function showLoader() {
+            document.getElementById('loader').style.display = 'flex';
+            document.getElementById('msform').style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>
