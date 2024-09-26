@@ -247,7 +247,7 @@ select.list-dt:focus {
 
 /*The background card*/
 .card {
-  padding: 40px !important;
+  padding: 30px 10px !important;
   border-radius: 22px !important;
   border: 2px solid #e1e2e6 !important;
 }
@@ -761,6 +761,16 @@ select.list-dt:focus {
   background: skyblue;
 }
 
+/* Check Icon */
+.check-icon {
+  position: absolute;
+  top: 8px;
+  transform: translate(-50%, -50%);
+  font-size: 20px;
+  color: rgb(62, 84, 163);
+  right: -19px;
+}
+
 /*Imaged Radio Buttons*/
 .radio-group {
   position: relative;
@@ -805,7 +815,7 @@ select.list-dt:focus {
 
 #captureButton {
   position: absolute;
-  bottom: -24px;
+  bottom: -31px;
   left: 50%;
   transform: translateX(-50%);
   font-size: 13px;
@@ -887,7 +897,7 @@ select.list-dt:focus {
 
 #counter {
   position: absolute;
-  top: 10px;
+  top: -4px;
   left: 50%;
   transform: translateX(-50%);
   font-size: 2em;

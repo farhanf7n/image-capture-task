@@ -27,7 +27,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-    <script src=""></script>
 </head>
 
 <body id="grad1">
@@ -39,7 +38,7 @@
     <div class="container d-flex align-items-center" style="height: 100vh" id="">
         <div class="row justify-content-center mt-0">
             <div class="col-12 col-sm-9 col-md-7 col-lg-6 text-center p-0 mt-0 mb-0">
-                <div style="
+                <div class="p-2 p-md-0" style="
               display: flex;
               flex-direction: column;
               justify-content: center;
@@ -49,24 +48,39 @@
                         Identity Verification
                     </h2>
                     <p class="text-left">Please complete all steps to proceed.</p>
-                    <div class="p-2">
+                    <div class="p-2 d-none d-md-block">
                         <img src="undraw_alert_re_j2op 1.png" alt="" class="img-fluid" />
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-sm-9 col-md-7 col-lg-6 text-center p-0 mt-0 mb-0">
+            <div class="col-12 col-sm-9 col-md-7 col-lg-6 text-center p-2 p-md-0 mt-0 mb-0">
                 <div class="card px-0 pt-4 pb-0 mt-3 mb-3">
                     <div class="row">
                         <div class="col-md-12 mx-0">
                             <form id="msform">
                                 <ul id="progressbar">
-                                    <li id="document">
+                                    <li class="active relative" id="document">
                                         <strong>ID Card Front</strong>
+                                        <div class="check-icon d-none">
+                                            <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                        </div>
                                     </li>
-                                    <li class="active" id="document"><strong>ID Card Back</strong></li>
-                                    <li id="selfie"><strong>Selfie</strong></li>
+                                    <li id="document"><strong>ID Card Back</strong>
+                                        <div class="check-icon d-none">
+                                            <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                        </div>
+                                    </li>
+                                    <li id="selfie"><strong>Selfie</strong>
+                                        <div class="check-icon d-none">
+                                            <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                        </div>
+                                    </li>
 
-                                    <li id="confirm"><strong>Fingerprint</strong></li>
+                                    <li id="confirm"><strong>Fingerprint</strong>
+                                        <div class="check-icon d-none">
+                                            <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                        </div>
+                                    </li>
                                 </ul>
                                 <fieldset>
                                     <div class="form-card">
@@ -101,15 +115,19 @@
                             </form>
 
                             <script>
-                                const video = document.getElementById("videoFeed");
+                                const video =
+                                    document.getElementById("videoFeed");
                                 const previewContainer =
-                                    document.getElementById("previewContainer");
+                                    document.getElementById(
+                                        "previewContainer"
+                                    );
 
                                 const overlayCanvas =
                                     document.getElementById("overlayCanvas");
                                 const captureButton =
                                     document.getElementById("captureButton");
-                                const overlayCtx = overlayCanvas.getContext("2d");
+                                const overlayCtx =
+                                    overlayCanvas.getContext("2d");
 
                                 // Function to draw a box border on the overlay canvas
                                 function drawBox() {
@@ -138,8 +156,8 @@
                                     );
 
                                     // Draw the rounded box on the overlay canvas
-                                    overlayCtx.strokeStyle = "#008000";
-                                    overlayCtx.lineWidth = 2;
+                                    overlayCtx.strokeStyle = "#CCFF00";
+                                    overlayCtx.lineWidth = 4;
 
                                     // Function to draw rounded rectangle
                                     drawRoundedRect(
@@ -152,67 +170,274 @@
                                     );
                                 }
 
+                                function drawRoundedRect(
+                                    ctx,
+                                    x,
+                                    y,
+                                    width,
+                                    height,
+                                    radius
+                                ) {
+                                    ctx.beginPath();
+                                    ctx.moveTo(x + radius, y);
+                                    ctx.lineTo(x + width - radius, y);
+                                    ctx.quadraticCurveTo(
+                                        x + width,
+                                        y,
+                                        x + width,
+                                        y + radius
+                                    );
+                                    ctx.lineTo(
+                                        x + width,
+                                        y + height - radius
+                                    );
+                                    ctx.quadraticCurveTo(
+                                        x + width,
+                                        y + height,
+                                        x + width - radius,
+                                        y + height
+                                    );
+                                    ctx.lineTo(x + radius, y + height);
+                                    ctx.quadraticCurveTo(
+                                        x,
+                                        y + height,
+                                        x,
+                                        y + height - radius
+                                    );
+                                    ctx.lineTo(x, y + radius);
+                                    ctx.quadraticCurveTo(x, y, x + radius, y);
+                                    ctx.closePath();
+                                    ctx.stroke();
+                                }
+
                                 // Call drawBox initially to show the box
                                 drawBox();
 
-                                function initializeCamera(facingMode) {
-                                    // Access the camera and stream the feed to the video element
-                                    navigator.mediaDevices
-                                        .getUserMedia({
-                                            video: {
-                                                facingMode: facingMode,
-                                            },
-                                        })
-                                        .then((stream) => {
-                                            video.srcObject = stream;
-                                        })
-                                        .catch((err) => {
-                                            console.error("Error accessing camera:", err);
-                                        });
+                                // Add this line to redraw the box when the video dimensions are known
+                                video.addEventListener(
+                                    "loadedmetadata",
+                                    drawBox
+                                );
+
+                                async function initializeCamera() {
+                                    try {
+                                        const stream =
+                                            await navigator.mediaDevices.getUserMedia(
+                                                {
+                                                    video: {
+                                                        facingMode: "environment",
+                                                        width: { ideal: 4096 },
+                                                        height: { ideal: 2160 },
+                                                        frameRate: { ideal: 60 },
+                                                    },
+                                                }
+                                            );
+                                        video.srcObject = stream;
+                                        await video.play();
+                                    } catch (error) {
+                                        console.error(
+                                            "Error accessing camera:",
+                                            error
+                                        );
+                                    }
                                 }
-                                initializeCamera("environment"); // 'environment' for back camera
+                                initializeCamera(); // 'environment' for back camera
                                 // Capture image when the button is clicked
-                                captureButton.addEventListener("click", () => {
-                                    captureImage();
-                                    // Perform image capture logic here
-                                });
+                                captureButton.addEventListener(
+                                    "click",
+                                    () => {
+                                        captureImage();
+                                        // Perform image capture logic here
+                                    }
+                                );
                                 var captured_image;
 
                                 function captureImage() {
                                     $("#cameraContainer").hide();
-                                    const canvas = document.createElement("canvas"); // Create a temporary canvas
+                                    const canvas =
+                                        document.createElement("canvas");
+
+                                    // Use the highest resolution available from the video stream
                                     canvas.width = video.videoWidth;
                                     canvas.height = video.videoHeight;
-                                    const ctx = canvas.getContext("2d");
+
+                                    // Use a high-quality 2D rendering context
+                                    const ctx = canvas.getContext("2d", {
+                                        alpha: false,
+                                        desynchronized: false,
+                                        willReadFrequently: true,
+                                    });
+
+                                    // Apply image smoothing for better quality
+                                    ctx.imageSmoothingEnabled = true;
+                                    ctx.imageSmoothingQuality = "high";
 
                                     // Draw the video frame onto the canvas
-                                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                                    ctx.drawImage(
+                                        video,
+                                        0,
+                                        0,
+                                        canvas.width,
+                                        canvas.height
+                                    );
 
-                                    const imageDataURL = canvas.toDataURL(); // Get image data as base64 URL
+                                    // Apply a subtle sharpening filter
+                                    applySharpening(
+                                        ctx,
+                                        canvas.width,
+                                        canvas.height
+                                    );
+
+                                    // Get image data as base64 URL without compression
+                                    const imageDataURL =
+                                        canvas.toDataURL("image/png");
                                     const img = new Image();
                                     img.src = imageDataURL;
                                     captured_image = imageDataURL;
+
                                     // Display captured image preview
                                     previewContainer.innerHTML = "";
                                     previewContainer.appendChild(img);
                                     $("#previewContainer").show();
                                     $("#retakebutton").show();
                                     $("#next_step").show();
+
+                                    // Show the check icon for ID Card Front
+                                    $('#progressbar li:nth-child(2) .check-icon').removeClass('d-none');
+                                }
+
+                                function applySharpening(
+                                    ctx,
+                                    width,
+                                    height
+                                ) {
+                                    const imageData = ctx.getImageData(
+                                        0,
+                                        0,
+                                        width,
+                                        height
+                                    );
+                                    const data = imageData.data;
+                                    const factor = 0.5; // Adjust this value to control sharpening intensity
+
+                                    for (let y = 1; y < height - 1; y++) {
+                                        for (let x = 1; x < width - 1; x++) {
+                                            const idx = (y * width + x) * 4;
+                                            for (let c = 0; c < 3; c++) {
+                                                const val =
+                                                    5 * data[idx + c] -
+                                                    data[idx - 4 + c] -
+                                                    data[idx + 4 + c] -
+                                                    data[idx - width * 4 + c] -
+                                                    data[idx + width * 4 + c];
+                                                data[idx + c] = Math.min(
+                                                    255,
+                                                    Math.max(
+                                                        0,
+                                                        data[idx + c] +
+                                                        factor * (val - data[idx + c])
+                                                    )
+                                                );
+                                            }
+                                        }
+                                    }
+
+                                    ctx.putImageData(imageData, 0, 0);
                                 }
                                 $("#msform").on("submit", function (e) {
                                     e.preventDefault();
                                 });
-                                $("#retakebutton").on("click", function (e) {
-                                    e.preventDefault();
-                                    $("#cameraContainer").show();
-                                    $("#previewContainer").hide();
-                                    $(this).hide();
-                                    $("#error_cnic_document").text("");
-                                });
+                                $("#retakebutton").on(
+                                    "click",
+                                    function (e) {
+                                        e.preventDefault();
+                                        $("#cameraContainer").show();
+                                        $("#previewContainer").hide();
+                                        $(this).hide();
+                                        $("#next_step").hide();
+                                        $("#error_cnic_document").text("");
+                                        $('#progressbar li:nth-child(2) .check-icon').addClass('d-none');
+                                    }
+                                );
 
                                 $("#next_step").on("click", function (e) {
                                     e.preventDefault();
-                                    uploadDocumentBack();
+                                    // Save the progress in localStorage
+                                    localStorage.setItem('step2Completed', 'true');
+                                    // Redirect to step3.html
+                                    window.location.href = "step3.html";
+                                });
+
+                                $.validator.addMethod(
+                                    "customDate",
+                                    function (value, element) {
+                                        // Check if the value matches the "d-m-Y" format using a regular expression
+                                        return /^(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[012])-\d{4}$/.test(
+                                            value
+                                        );
+                                    },
+                                    "Please enter a valid date (dd-mm-yyyy)"
+                                );
+                                $("#saveDocumentForm").validate({
+                                    rules: {
+                                        identity_name: {
+                                            required: true,
+                                        },
+                                        father_name: {
+                                            required: true,
+                                        },
+                                        identity_number: {
+                                            required: true,
+                                            minlength: 13,
+                                            maxlength: 13,
+                                            number: true,
+                                        },
+                                        date_of_birth: {
+                                            required: true,
+                                            customDate: true,
+                                        },
+                                        card_issue_date: {
+                                            required: true,
+                                            customDate: true,
+                                        },
+                                        card_expiry_date: {
+                                            required: true,
+                                            customDate: true,
+                                        },
+                                    },
+                                    messages: {
+                                        date_of_birth: {
+                                            dateISO:
+                                                "Enter a valid date in format (1998-10-04).",
+                                        },
+                                        card_issue_date: {
+                                            dateISO:
+                                                "Enter a valid date in format (1998-10-04).",
+                                        },
+                                        card_expiry_date: {
+                                            dateISO:
+                                                "Enter a valid date in format (1998-10-04).",
+                                        },
+
+                                        identity_number: {
+                                            number:
+                                                "Put only numbers of your id card.",
+                                            minlength:
+                                                "The ID card number must be exactly 13 characters long.",
+                                            maxlength:
+                                                "The ID card number must be exactly 13 characters long.",
+                                        },
+                                    },
+                                    errorPlacement: function (
+                                        error,
+                                        element
+                                    ) {
+                                        error.insertAfter(element);
+                                        //   error.appendTo(element.parent());
+                                    },
+                                    submitHandler: function (form) {
+                                        form.submit();
+                                    },
                                 });
                             </script>
                         </div>
@@ -240,6 +465,16 @@
         function showLoader() {
             document.getElementById("loader").style.display = "flex";
             document.getElementById("msform").style.display = "none";
+        }
+
+        // Check if step 1 was completed
+        if (localStorage.getItem('step1Completed') === 'true') {
+            // Keep ID Card Front active and checked
+            $('#progressbar li:first-child').addClass('active');
+            $('#progressbar li:first-child .check-icon').removeClass('d-none');
+
+            // Make ID Card Back active
+            $('#progressbar li:nth-child(2)').addClass('active');
         }
     </script>
 </body>
