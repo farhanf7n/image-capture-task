@@ -67,9 +67,9 @@
                     </div>
                   </li>
                 </ul>
-                <div class="row justify-content-center" style="margin-bottom: 16px;">
+                <div class="row justify-content-center mb-3">
                   <div class="col-12 text-center">
-                    <p style="opacity: 0.7; margin-bottom: unset;">Step 1 of 4</p>
+                    <p style="opacity: 0.7;">Step 1 of 4</p>
                   </div>
                 </div>
                 <fieldset>
@@ -333,43 +333,31 @@
 
                                 // Function to draw a box border on the overlay canvas
                                 function drawBox() {
-                                  const frameWidth =
-                                    video.videoWidth || 300; // Use video width if available, else fallback to 300
-                                  const frameHeight =
-                                    video.videoHeight || 200; // Use video height if available, else fallback to 200
-                                  const boxWidth = frameWidth * 0.8; // 80% of frame width
-                                  const boxHeight = frameHeight * 0.8; // 80% of frame height
-                                  const borderRadius = 2; // Border radius
+                                  const frameWidth = video.videoWidth || 640; // Use video width if available, else fallback to 640
+                                  const frameHeight = video.videoHeight || 480; // Use video height if available, else fallback to 480
+
+                                  // Set fixed dimensions for the ID card
+                                  const boxWidth = 350;
+                                  const boxHeight = 467;
+
+                                  const borderRadius = 10; // Increased border radius for better visibility
 
                                   const boxX = (frameWidth - boxWidth) / 2; // Calculate X position of the box
-                                  const boxY =
-                                    (frameHeight - boxHeight) / 2; // Calculate Y position of the box
+                                  const boxY = (frameHeight - boxHeight) / 2; // Calculate Y position of the box
 
                                   // Set the size of the overlay canvas
                                   overlayCanvas.width = frameWidth;
                                   overlayCanvas.height = frameHeight;
 
                                   // Clear the overlay canvas
-                                  overlayCtx.clearRect(
-                                    0,
-                                    0,
-                                    overlayCanvas.width,
-                                    overlayCanvas.height
-                                  );
+                                  overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
                                   // Draw the rounded box on the overlay canvas
                                   overlayCtx.strokeStyle = "#CCFF00";
                                   overlayCtx.lineWidth = 4;
 
                                   // Function to draw rounded rectangle
-                                  drawRoundedRect(
-                                    overlayCtx,
-                                    boxX,
-                                    boxY,
-                                    boxWidth,
-                                    boxHeight,
-                                    borderRadius
-                                  );
+                                  drawRoundedRect(overlayCtx, boxX, boxY, boxWidth, boxHeight, borderRadius);
                                 }
 
                                 function drawRoundedRect(
