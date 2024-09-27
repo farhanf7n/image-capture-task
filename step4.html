@@ -255,27 +255,37 @@
 
                                 function captureImage() {
                                     $('#cameraContainer').hide();
-                                    const canvas = document.createElement('canvas'); // Create a temporary canvas
-                                    canvas.width = video.videoWidth; // Set canvas width to video width
-                                    canvas.height = video.videoHeight; // Set canvas height to video height
+                                    const canvas = document.createElement('canvas');
                                     const ctx = canvas.getContext('2d');
 
-                                    // Draw the video frame onto the canvas
-                                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                                    // Set canvas size to a smaller, fixed size
+                                    const targetWidth = 640; // Adjust this value as needed
+                                    const targetHeight = (video.videoHeight / video.videoWidth) * targetWidth;
 
-                                    const imageDataURL = canvas.toDataURL(); // Get image data as base64 URL
+                                    canvas.width = targetWidth;
+                                    canvas.height = targetHeight;
+
+                                    // Draw the video frame onto the canvas, scaling it down
+                                    ctx.drawImage(video, 0, 0, targetWidth, targetHeight);
+
+                                    // Convert to JPEG with reduced quality
+                                    const imageDataURL = canvas.toDataURL('image/jpeg', 0.8); // Adjust quality (0.8 = 80%) as needed
+
+                                    // Create image element and set source
                                     const img = new Image();
+                                    img.onload = function () {
+                                        // Clear previous content and append new image
+                                        previewContainer.innerHTML = '';
+                                        previewContainer.appendChild(img);
+                                        $('#previewContainer').show();
+                                        $('#retakebutton').show();
+                                        $('#next_step').show();
+
+                                        // Show the check icon for Fingerprint
+                                        $('#progressbar li:nth-child(4) .check-icon').removeClass('d-none');
+                                    };
                                     img.src = imageDataURL;
                                     captured_image = imageDataURL;
-                                    // Display captured image preview
-                                    previewContainer.innerHTML = '';
-                                    previewContainer.appendChild(img);
-                                    $('#previewContainer').show();
-                                    $('#retakebutton').show();
-                                    $('#next_step').show();
-
-                                    // Show the check icon for ID Card Back
-                                    $('#progressbar li:nth-child(2) .check-icon').removeClass('d-none');
                                 }
                                 $('#msform').on('submit', function (e) {
                                     e.preventDefault();
@@ -287,7 +297,7 @@
                                     $(this).hide();
                                     $('#next_step').hide();  // Hide the next step button
                                     $('#error_finger_prints').text('');
-                                    $('#progressbar li:nth-child(2) .check-icon').addClass('d-none');
+                                    $('#progressbar li:nth-child(4) .check-icon').addClass('d-none');
                                 });
 
                                 $(document).ready(function () {
