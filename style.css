@@ -764,7 +764,7 @@ select.list-dt:focus {
 /* Check Icon */
 .check-icon {
   position: absolute;
-  top: 8px;
+  top: 10px;
   transform: translate(-50%, -50%);
   font-size: 20px;
   color: rgb(62, 84, 163);

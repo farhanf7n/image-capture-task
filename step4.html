@@ -162,62 +162,51 @@
                                 const nextStepButton = document.getElementById('next_step');
                                 const overlayCtx = overlayCanvas.getContext('2d');
 
-                                function drawCircles() {
-                                    // Define constants for the camera frame and circle dimensions
-                                    const frameWidth = 300; // Width of the camera frame
-                                    const frameHeight = 200; // Height of the camera frame
-                                    const circleRadius = 20; // Smaller radius for each circle
-                                    const spacing = 10; // Increase spacing between circles
-                                    const topMargin = 15; // Smaller top margin from the edge of the frame
+                                function drawFingerGuides() {
+                                    const frameWidth = video.videoWidth || 300;
+                                    const frameHeight = video.videoHeight || 200;
+                                    const fingerWidth = 40; // Width of each finger guide
+                                    const fingerHeight = 120; // Height of each finger guide
+                                    const spacing = 8; // Spacing between fingers
+                                    const topMargin = 30; // Margin from the top of the frame
 
-                                    // Calculate the total width of the circles and spacing combined
-                                    const totalWidth = (4 * circleRadius * 2) + (3 * spacing);
+                                    const totalWidth = (4 * fingerWidth) + (3 * spacing);
+                                    const startX = (frameWidth - totalWidth) / 2;
 
-                                    // Calculate starting X position to center the circles horizontally
-                                    const startX = (frameWidth - totalWidth) / 2 + circleRadius;
-
-                                    // Adjust the Y positions to simulate finger heights
-                                    const fingerOffsets = {
-                                        thumb: 30, // Thumb will be lower
-                                        index: 0, // Index finger is the highest
-                                        middle: -5, // Middle finger slightly higher than index
-                                        ring: 5, // Ring finger slightly lower than index
-                                        little: 15 // Little finger is the lowest
-                                    };
-
-                                    // Set the size of the overlay canvas to match the camera frame
                                     overlayCanvas.width = frameWidth;
                                     overlayCanvas.height = frameHeight;
-
-                                    // Clear the overlay canvas before drawing
                                     overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
-                                    // Set styles for the circle outlines
-                                    overlayCtx.strokeStyle = 'red'; // Circle border color
-                                    overlayCtx.lineWidth = 2; // Circle border thickness
+                                    overlayCtx.strokeStyle = '#CCFF00';
+                                    overlayCtx.lineWidth = 3;
 
-                                    // List of finger heights based on the natural shape of the hand
-                                    const yOffsets = [
-                                        topMargin + circleRadius + fingerOffsets.thumb, // Thumb
-                                        topMargin + circleRadius + fingerOffsets.index, // Index finger
-                                        topMargin + circleRadius + fingerOffsets.middle, // Middle finger
-                                        topMargin + circleRadius + fingerOffsets.ring, // Ring finger
-                                        topMargin + circleRadius + fingerOffsets.little // Little finger
-                                    ];
-
-                                    // Draw the circles for each finger
                                     for (let i = 0; i < 4; i++) {
-                                        // Calculate the X position for each circle based on index and spacing
-                                        const xPosition = startX + i * (2 * circleRadius + spacing);
+                                        const xPosition = startX + i * (fingerWidth + spacing);
+                                        const yPosition = topMargin;
 
-                                        // Begin drawing the circle
+                                        // Draw finger shape
                                         overlayCtx.beginPath();
-                                        overlayCtx.arc(xPosition, yOffsets[i], circleRadius, 0, Math.PI * 2);
-                                        overlayCtx.stroke(); // Draw the circle border
+                                        overlayCtx.moveTo(xPosition + fingerWidth / 2, yPosition); // Top middle
+                                        overlayCtx.quadraticCurveTo(xPosition, yPosition, xPosition, yPosition + 20); // Top left curve
+                                        overlayCtx.lineTo(xPosition, yPosition + fingerHeight - 20); // Left side
+                                        overlayCtx.quadraticCurveTo(xPosition, yPosition + fingerHeight, xPosition + fingerWidth / 2, yPosition + fingerHeight); // Bottom curve
+                                        overlayCtx.quadraticCurveTo(xPosition + fingerWidth, yPosition + fingerHeight, xPosition + fingerWidth, yPosition + fingerHeight - 20); // Bottom right curve
+                                        overlayCtx.lineTo(xPosition + fingerWidth, yPosition + 20); // Right side
+                                        overlayCtx.quadraticCurveTo(xPosition + fingerWidth, yPosition, xPosition + fingerWidth / 2, yPosition); // Top right curve
+                                        overlayCtx.stroke();
                                     }
+
+                                    // Add text instruction
+                                    overlayCtx.fillStyle = '#CCFF00';
+                                    overlayCtx.font = '16px Arial';
+                                    overlayCtx.textAlign = 'center';
+                                    overlayCtx.fillText('Place your 4 fingers in the guides', frameWidth / 2, frameHeight - 20);
                                 }
 
-                                drawCircles()
+                                // Call this function to draw the finger guides
+                                drawFingerGuides();
+
+                                drawFingerGuides()
 
                                 function initializeCamera(facingMode) {
                                     // Access the camera and stream the feed to the video element
