@@ -768,7 +768,7 @@ select.list-dt:focus {
   transform: translate(-50%, -50%);
   font-size: 20px;
   color: rgb(62, 84, 163);
-  right: -19px;
+  right: -22px;
 }
 
 /*Imaged Radio Buttons*/
@@ -1167,7 +1167,7 @@ select.list-dt:focus {
   font-size: 18px;
   color: #ffffff;
   background-color: rgb(106, 190, 205);
-  border-radius: 50%;
+  border-radius: 8px;
   margin: 0 auto 10px auto;
   padding: 2px;
 }
