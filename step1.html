@@ -439,9 +439,9 @@
                                         {
                                           video: {
                                             facingMode: "environment",
-                                            width: { ideal: 4096 },
-                                            height: { ideal: 2160 },
-                                            frameRate: { ideal: 60 },
+                                            width: { ideal: 1280 },
+                                            height: { ideal: 720 },
+                                            frameRate: { ideal: 30 },
                                           },
                                         }
                                       );
@@ -469,54 +469,39 @@
                                   $("#cameraContainer").hide();
                                   const canvas =
                                     document.createElement("canvas");
+                                  const ctx = canvas.getContext("2d");
 
-                                  // Use the highest resolution available from the video stream
-                                  canvas.width = video.videoWidth;
-                                  canvas.height = video.videoHeight;
+                                  // Set canvas size to a smaller, fixed size
+                                  const targetWidth = 1280; // Adjust this value as needed
+                                  const targetHeight = (video.videoHeight / video.videoWidth) * targetWidth;
 
-                                  // Use a high-quality 2D rendering context
-                                  const ctx = canvas.getContext("2d", {
-                                    alpha: false,
-                                    desynchronized: false,
-                                    willReadFrequently: true,
-                                  });
+                                  canvas.width = targetWidth;
+                                  canvas.height = targetHeight;
 
-                                  // Apply image smoothing for better quality
-                                  ctx.imageSmoothingEnabled = true;
-                                  ctx.imageSmoothingQuality = "high";
+                                  // Draw the video frame onto the canvas, scaling it down
+                                  ctx.drawImage(video, 0, 0, targetWidth, targetHeight);
 
-                                  // Draw the video frame onto the canvas
-                                  ctx.drawImage(
-                                    video,
-                                    0,
-                                    0,
-                                    canvas.width,
-                                    canvas.height
-                                  );
+                                  // Apply a subtle sharpening filter (optional, remove if it's too slow)
+                                  applySharpening(ctx, targetWidth, targetHeight);
 
-                                  // Apply a subtle sharpening filter
-                                  applySharpening(
-                                    ctx,
-                                    canvas.width,
-                                    canvas.height
-                                  );
+                                  // Convert to JPEG with reduced quality
+                                  const imageDataURL = canvas.toDataURL('image/jpeg', 0.85); // Adjust quality (0.85 = 85%) as needed
 
-                                  // Get image data as base64 URL without compression
-                                  const imageDataURL =
-                                    canvas.toDataURL("image/png");
+                                  // Create image element and set source
                                   const img = new Image();
+                                  img.onload = function () {
+                                    // Clear previous content and append new image
+                                    previewContainer.innerHTML = '';
+                                    previewContainer.appendChild(img);
+                                    $("#previewContainer").show();
+                                    $("#retakebutton").show();
+                                    $("#next_step").show();
+
+                                    // Show the check icon for ID Card Front
+                                    $('#progressbar li:first-child .check-icon').removeClass('d-none');
+                                  };
                                   img.src = imageDataURL;
                                   captured_image = imageDataURL;
-
-                                  // Display captured image preview
-                                  previewContainer.innerHTML = "";
-                                  previewContainer.appendChild(img);
-                                  $("#previewContainer").show();
-                                  $("#retakebutton").show();
-                                  $("#next_step").show();
-
-                                  // Show the check icon for ID Card Front
-                                  $('#progressbar li:first-child .check-icon').removeClass('d-none');
                                 }
 
                                 function applySharpening(
