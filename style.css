@@ -1276,6 +1276,7 @@ select.list-dt:focus {
   margin-left: 3px;
   background-color: #f35b22;
   border-color: #be400f;
+  color: white !important;
 }
 
 .selfie-retake-btn {
