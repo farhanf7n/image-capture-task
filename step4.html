@@ -106,7 +106,7 @@
                                     </li>
                                     <li id="selfie">
                                         <strong>Selfie</strong>
-                                        <div class="check-icon d-none">
+                                        <div class="check-icon d-none selfie-icon">
                                             <i class="fa fa-check-square-o" aria-hidden="true"></i>
                                         </div>
                                     </li>
@@ -165,9 +165,9 @@
                                 function drawFingerGuides() {
                                     const frameWidth = video.videoWidth || 300;
                                     const frameHeight = video.videoHeight || 200;
-                                    const fingerWidth = 40; // Width of each finger guide
+                                    const fingerWidth = 35; // Width of each finger guide
                                     const fingerHeight = 120; // Height of each finger guide
-                                    const spacing = 8; // Spacing between fingers
+                                    const spacing = 4; // Spacing between fingers
                                     const topMargin = 30; // Margin from the top of the frame
 
                                     const totalWidth = (4 * fingerWidth) + (3 * spacing);
@@ -178,7 +178,7 @@
                                     overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
                                     overlayCtx.strokeStyle = '#CCFF00';
-                                    overlayCtx.lineWidth = 3;
+                                    overlayCtx.lineWidth = 2;
 
                                     for (let i = 0; i < 4; i++) {
                                         const xPosition = startX + i * (fingerWidth + spacing);
@@ -198,7 +198,7 @@
 
                                     // Add text instruction
                                     overlayCtx.fillStyle = '#CCFF00';
-                                    overlayCtx.font = '16px Arial';
+                                    overlayCtx.font = '14px Barlow';
                                     overlayCtx.textAlign = 'center';
                                     overlayCtx.fillText('Place your 4 fingers in the guides', frameWidth / 2, frameHeight - 20);
                                 }

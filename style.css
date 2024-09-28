@@ -764,11 +764,11 @@ select.list-dt:focus {
 /* Check Icon */
 .check-icon {
   position: absolute;
-  top: 10px;
+  bottom: 18px;
   transform: translate(-50%, -50%);
-  font-size: 20px;
-  color: rgb(62, 84, 163);
-  right: -22px;
+  font-size: 13px;
+  color: white;
+  right: 6px;
 }
 
 /*Imaged Radio Buttons*/
@@ -1151,6 +1151,10 @@ select.list-dt:focus {
 #progressbar #fingerprint:before {
   font-family: FontAwesome;
   content: "\f09d";
+}
+
+.check-icon.selfie-icon{
+  right: -3px !important;
 }
 
 #progressbar #confirm:before {
