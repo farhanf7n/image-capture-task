@@ -78,12 +78,10 @@
         #cameraContainer {
             position: relative;
             width: 300px;
-            /* Set to exact width */
-            height: 200px;
-            /* Set to exact height */
+            height: 400px;
+            /* Increased from 200px to 400px */
             margin: 0 auto;
-            /* Center the container */
-            /* overflow: hidden; */
+            overflow: hidden;
         }
 
         #videoFeed,
@@ -98,7 +96,8 @@
 
         #captureButton {
             position: absolute;
-            bottom: -36px !important;
+            bottom: 10px;
+            /* Adjusted to be closer to the bottom of the taller container */
             left: 50%;
             transform: translateX(-50%);
             z-index: 10;
@@ -215,14 +214,13 @@
                                     const aspectRatio = handImage.width / handImage.height;
                                     let imgWidth, imgHeight;
 
-                                    // Increase the size multiplier from 0.7 to 0.85 (85% of frame size)
-                                    if (frameWidth / frameHeight > aspectRatio) {
-                                        // Frame is wider than the image
-                                        imgHeight = frameHeight * 0.85; // Increased from 0.7 to 0.85
-                                        imgWidth = imgHeight * aspectRatio;
-                                    } else {
-                                        // Frame is taller than the image
-                                        imgWidth = frameWidth * 0.85; // Increased from 0.7 to 0.85
+                                    // Adjust the size multiplier as needed
+                                    imgHeight = frameHeight * 0.9; // Increased to use more of the vertical space
+                                    imgWidth = imgHeight * aspectRatio;
+
+                                    // If the image is too wide, scale it down
+                                    if (imgWidth > frameWidth * 0.9) {
+                                        imgWidth = frameWidth * 0.9;
                                         imgHeight = imgWidth / aspectRatio;
                                     }
 
@@ -233,24 +231,23 @@
 
                                     // Add text instruction
                                     overlayCtx.fillStyle = '#CCFF00';
-                                    overlayCtx.font = 'bold 18px Barlow'; // Increased font size from 16px to 18px
+                                    overlayCtx.font = 'bold 18px Barlow';
                                     overlayCtx.textAlign = 'center';
-                                    overlayCtx.fillText('Place your 4 fingers as shown', frameWidth / 2, frameHeight - 25); // Adjusted position
                                 }
 
                                 function initializeCamera(facingMode) {
                                     navigator.mediaDevices.getUserMedia({
                                         video: {
                                             facingMode: facingMode,
-                                            width: { exact: 300 },  // Changed from ideal: 1280 to exact: 300
-                                            height: { exact: 200 }  // Changed from ideal: 720 to exact: 200
+                                            width: { exact: 300 },
+                                            height: { exact: 400 }  // Increased from 200 to 400
                                         }
                                     })
                                         .then(stream => {
                                             video.srcObject = stream;
                                             video.onloadedmetadata = () => {
                                                 video.play();
-                                                drawFingerGuides(); // Draw guides only once when video is loaded
+                                                drawFingerGuides();
                                             };
                                         })
                                         .catch(err => {
@@ -260,7 +257,7 @@
                                                 video: {
                                                     facingMode: facingMode,
                                                     width: { ideal: 300 },
-                                                    height: { ideal: 200 }
+                                                    height: { ideal: 400 }  // Increased from 200 to 400
                                                 }
                                             })
                                                 .then(stream => {
