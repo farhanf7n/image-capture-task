@@ -19,8 +19,30 @@
         href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet" />
 
+    <!-- Add Font Awesome for arrow icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
     <!-- Custom css -->
     <link rel="stylesheet" href="style.css" />
+
+    <style>
+        .arrow-icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 48px;
+            color: white;
+            display: none;
+        }
+
+        .left-arrow {
+            left: 20px;
+        }
+
+        .right-arrow {
+            right: 20px;
+        }
+    </style>
 
     <meta name="csrf-token" content="">
 
@@ -80,8 +102,8 @@
                                         <div id="overlay"></div>
                                         <div id="counter"></div>
                                         <p id="instruction">Look Straight in Circle</p>
-                                        <div class="animation-arrow left-arrow"></div>
-                                        <div class="animation-arrow right-arrow"></div>
+                                        <i class="fas fa-arrow-left arrow-icon left-arrow"></i>
+                                        <i class="fas fa-arrow-right arrow-icon right-arrow"></i>
                                     </div>
                                     <div id="preview_div" style="display: none">
                                         <p class="text-center">We've recorded your video. Processing, please wait...</p>
