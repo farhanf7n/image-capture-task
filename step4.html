@@ -85,9 +85,9 @@
     </div>
     <!-- MultiStep Form -->
     <div class="container d-flex align-items-center" style="height: 100vh" id="">
-        <div class="row justify-content-center mt-0">
+        <div class="row justify-content-center my-5">
             <div class="col-12 col-sm-9 col-md-7 col-lg-6 text-center p-2 p-md-0 mt-0 mb-0">
-                <div class="card px-0 pt-4 pb-0 mt-3 mb-3">
+                <div class="card">
                     <div class="row">
                         <div class="col-md-12 mx-0">
                             <form id="msform">
@@ -165,7 +165,7 @@
                                 function drawFingerGuides() {
                                     const frameWidth = video.videoWidth || 300;
                                     const frameHeight = video.videoHeight || 200;
-                                    const fingerWidth = 75; // Width of each finger guide
+                                    const fingerWidth = 65; // Width of each finger guide
                                     const fingerHeight = 100; // Reduced height of each finger guide
                                     const spacing = 4; // Spacing between fingers
                                     const topMargin = 40; // Increased margin from the top of the frame
@@ -188,9 +188,8 @@
                                         overlayCtx.beginPath();
                                         overlayCtx.moveTo(xPosition + fingerWidth / 2, yPosition); // Top middle
                                         overlayCtx.quadraticCurveTo(xPosition, yPosition, xPosition, yPosition + 20); // Top left curve
-                                        overlayCtx.lineTo(xPosition, yPosition + fingerHeight - 20); // Left side
-                                        overlayCtx.quadraticCurveTo(xPosition, yPosition + fingerHeight, xPosition + fingerWidth / 2, yPosition + fingerHeight); // Bottom curve
-                                        overlayCtx.quadraticCurveTo(xPosition + fingerWidth, yPosition + fingerHeight, xPosition + fingerWidth, yPosition + fingerHeight - 20); // Bottom right curve
+                                        overlayCtx.lineTo(xPosition, yPosition + fingerHeight); // Left side
+                                        overlayCtx.moveTo(xPosition + fingerWidth, yPosition + fingerHeight); // Move to bottom right without drawing
                                         overlayCtx.lineTo(xPosition + fingerWidth, yPosition + 20); // Right side
                                         overlayCtx.quadraticCurveTo(xPosition + fingerWidth, yPosition, xPosition + fingerWidth / 2, yPosition); // Top right curve
                                         overlayCtx.stroke();
