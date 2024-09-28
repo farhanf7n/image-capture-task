@@ -3,7 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Step - 4</title>
     <!-- Bootstrap css  -->
@@ -208,20 +210,54 @@
                                 drawFingerGuides();
 
                                 function initializeCamera(facingMode) {
-                                    // Access the camera and stream the feed to the video element
-                                    navigator.mediaDevices.getUserMedia({
+                                    const constraints = {
                                         video: {
-                                            facingMode: facingMode
+                                            facingMode: facingMode,
+                                            width: { ideal: 1280 },
+                                            height: { ideal: 720 }
                                         }
-                                    })
+                                    };
+
+                                    navigator.mediaDevices.getUserMedia(constraints)
                                         .then(stream => {
                                             video.srcObject = stream;
+                                            video.play();
+                                            video.onloadedmetadata = () => {
+                                                drawFingerGuides();
+                                            };
                                         })
                                         .catch(err => {
                                             console.error('Error accessing camera:', err);
+                                            if (err.name === 'NotAllowedError') {
+                                                alert('Camera access denied. Please grant permission to use the camera.');
+                                            } else if (err.name === 'NotFoundError') {
+                                                alert('No camera found on your device.');
+                                            } else {
+                                                alert('Error accessing the camera. Please try again.');
+                                            }
                                         });
                                 }
-                                initializeCamera('environment'); // 'environment' for back camera
+
+                                // Call this function when the page loads
+                                document.addEventListener('DOMContentLoaded', () => {
+                                    initializeCamera('environment');
+                                });
+
+                                // Add this function to handle orientation changes
+                                function handleOrientationChange() {
+                                    if (video.srcObject) {
+                                        const track = video.srcObject.getVideoTracks()[0];
+                                        track.applyConstraints({
+                                            width: { ideal: window.innerWidth },
+                                            height: { ideal: window.innerHeight }
+                                        }).then(() => {
+                                            drawFingerGuides();
+                                        });
+                                    }
+                                }
+
+                                // Listen for orientation changes
+                                window.addEventListener('orientationchange', handleOrientationChange);
 
                                 // Capture image when the button is clicked
                                 captureButton.addEventListener('click', () => {
