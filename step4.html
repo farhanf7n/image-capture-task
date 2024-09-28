@@ -3,9 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Step - 4</title>
     <!-- Bootstrap css  -->
@@ -87,9 +85,9 @@
     </div>
     <!-- MultiStep Form -->
     <div class="container d-flex align-items-center" style="height: 100vh" id="">
-        <div class="row justify-content-center my-5">
+        <div class="row justify-content-center mt-0">
             <div class="col-12 col-sm-9 col-md-7 col-lg-6 text-center p-2 p-md-0 mt-0 mb-0">
-                <div class="card">
+                <div class="card px-0 pt-4 pb-0 mt-3 mb-3">
                     <div class="row">
                         <div class="col-md-12 mx-0">
                             <form id="msform">
@@ -127,11 +125,11 @@
                                 <fieldset>
                                     <div class="form-card">
                                         <h2 class="barlow-bold text-left" style="
-                          font-size: 20px;
-                          line-height: 30px;
-                          font-weight: 600;
-                          color: #1c2022;
-                        ">Upload Your Fingerprint</h2>
+                         font-size: 20px;
+                         line-height: 30px;
+                         font-weight: 600;
+                         color: #1c2022;
+                       ">Upload Your Fingerprint</h2>
                                         <p class="pg-text">Upload your fingerprints.please make
                                             sure that the document should be
                                             clear
@@ -167,7 +165,7 @@
                                 function drawFingerGuides() {
                                     const frameWidth = video.videoWidth || 300;
                                     const frameHeight = video.videoHeight || 200;
-                                    const fingerWidth = 65; // Width of each finger guide
+                                    const fingerWidth = 55; // Width of each finger guide
                                     const fingerHeight = 100; // Reduced height of each finger guide
                                     const spacing = 4; // Spacing between fingers
                                     const topMargin = 40; // Increased margin from the top of the frame
@@ -190,8 +188,9 @@
                                         overlayCtx.beginPath();
                                         overlayCtx.moveTo(xPosition + fingerWidth / 2, yPosition); // Top middle
                                         overlayCtx.quadraticCurveTo(xPosition, yPosition, xPosition, yPosition + 20); // Top left curve
-                                        overlayCtx.lineTo(xPosition, yPosition + fingerHeight); // Left side
-                                        overlayCtx.moveTo(xPosition + fingerWidth, yPosition + fingerHeight); // Move to bottom right without drawing
+                                        overlayCtx.lineTo(xPosition, yPosition + fingerHeight - 20); // Left side
+                                        overlayCtx.quadraticCurveTo(xPosition, yPosition + fingerHeight, xPosition + fingerWidth / 2, yPosition + fingerHeight); // Bottom curve
+                                        overlayCtx.quadraticCurveTo(xPosition + fingerWidth, yPosition + fingerHeight, xPosition + fingerWidth, yPosition + fingerHeight - 20); // Bottom right curve
                                         overlayCtx.lineTo(xPosition + fingerWidth, yPosition + 20); // Right side
                                         overlayCtx.quadraticCurveTo(xPosition + fingerWidth, yPosition, xPosition + fingerWidth / 2, yPosition); // Top right curve
                                         overlayCtx.stroke();
@@ -210,54 +209,20 @@
                                 drawFingerGuides();
 
                                 function initializeCamera(facingMode) {
-                                    const constraints = {
+                                    // Access the camera and stream the feed to the video element
+                                    navigator.mediaDevices.getUserMedia({
                                         video: {
-                                            facingMode: facingMode,
-                                            width: { ideal: 1280 },
-                                            height: { ideal: 720 }
+                                            facingMode: facingMode
                                         }
-                                    };
-
-                                    navigator.mediaDevices.getUserMedia(constraints)
+                                    })
                                         .then(stream => {
                                             video.srcObject = stream;
-                                            video.play();
-                                            video.onloadedmetadata = () => {
-                                                drawFingerGuides();
-                                            };
                                         })
                                         .catch(err => {
                                             console.error('Error accessing camera:', err);
-                                            if (err.name === 'NotAllowedError') {
-                                                alert('Camera access denied. Please grant permission to use the camera.');
-                                            } else if (err.name === 'NotFoundError') {
-                                                alert('No camera found on your device.');
-                                            } else {
-                                                alert('Error accessing the camera. Please try again.');
-                                            }
                                         });
                                 }
-
-                                // Call this function when the page loads
-                                document.addEventListener('DOMContentLoaded', () => {
-                                    initializeCamera('environment');
-                                });
-
-                                // Add this function to handle orientation changes
-                                function handleOrientationChange() {
-                                    if (video.srcObject) {
-                                        const track = video.srcObject.getVideoTracks()[0];
-                                        track.applyConstraints({
-                                            width: { ideal: window.innerWidth },
-                                            height: { ideal: window.innerHeight }
-                                        }).then(() => {
-                                            drawFingerGuides();
-                                        });
-                                    }
-                                }
-
-                                // Listen for orientation changes
-                                window.addEventListener('orientationchange', handleOrientationChange);
+                                initializeCamera('environment'); // 'environment' for back camera
 
                                 // Capture image when the button is clicked
                                 captureButton.addEventListener('click', () => {
@@ -403,5 +368,3 @@
         });
     </script>
 </body>
-
-</html>
