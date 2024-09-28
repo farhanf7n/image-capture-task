@@ -165,7 +165,7 @@
                                 function drawFingerGuides() {
                                     const frameWidth = video.videoWidth || 300;
                                     const frameHeight = video.videoHeight || 200;
-                                    const fingerWidth = 45; // Width of each finger guide
+                                    const fingerWidth = 55; // Width of each finger guide
                                     const fingerHeight = 100; // Reduced height of each finger guide
                                     const spacing = 4; // Spacing between fingers
                                     const topMargin = 40; // Increased margin from the top of the frame
@@ -198,7 +198,7 @@
 
                                     // Add text instruction
                                     overlayCtx.fillStyle = '#CCFF00';
-                                    overlayCtx.font = '16px Barlow'; // Increased font size
+                                    overlayCtx.font = 'bold 16px Barlow'; // Made text bold and kept increased font size
                                     overlayCtx.textAlign = 'center';
                                     overlayCtx.fillText('Place your 4 fingers in the guides', frameWidth / 2, frameHeight - 30); // Moved text up
                                 }
@@ -206,7 +206,7 @@
                                 // Call this function to draw the finger guides
                                 drawFingerGuides();
 
-                                drawFingerGuides()
+                                drawFingerGuides();
 
                                 function initializeCamera(facingMode) {
                                     // Access the camera and stream the feed to the video element
