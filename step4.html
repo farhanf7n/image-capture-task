@@ -165,7 +165,7 @@
                                 function drawFingerGuides() {
                                     const frameWidth = video.videoWidth || 300;
                                     const frameHeight = video.videoHeight || 200;
-                                    const fingerWidth = 35; // Width of each finger guide
+                                    const fingerWidth = 45; // Width of each finger guide
                                     const fingerHeight = 120; // Height of each finger guide
                                     const spacing = 4; // Spacing between fingers
                                     const topMargin = 30; // Margin from the top of the frame
@@ -198,7 +198,7 @@
 
                                     // Add text instruction
                                     overlayCtx.fillStyle = '#CCFF00';
-                                    overlayCtx.font = '14px Barlow';
+                                    overlayCtx.font = '12px Barlow';
                                     overlayCtx.textAlign = 'center';
                                     overlayCtx.fillText('Place your 4 fingers in the guides', frameWidth / 2, frameHeight - 20);
                                 }
