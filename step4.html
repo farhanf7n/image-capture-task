@@ -74,6 +74,40 @@
         .popup-content {
             padding: 20px;
         }
+
+        #cameraContainer {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 75%;
+            /* 4:3 aspect ratio */
+            /* overflow: hidden; */
+        }
+
+        #videoFeed {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #overlayCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #captureButton {
+            position: absolute;
+            bottom: -36px !important;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
     </style>
 
 </head>
@@ -162,66 +196,79 @@
                                 const nextStepButton = document.getElementById('next_step');
                                 const overlayCtx = overlayCanvas.getContext('2d');
 
+                                let handImage = new Image();
+                                handImage.src = 'Hand.png';
+
                                 function drawFingerGuides() {
                                     const frameWidth = video.videoWidth || 300;
                                     const frameHeight = video.videoHeight || 200;
-                                    const fingerWidth = 55; // Width of each finger guide
-                                    const fingerHeight = 100; // Reduced height of each finger guide
-                                    const spacing = 4; // Spacing between fingers
-                                    const topMargin = 40; // Increased margin from the top of the frame
-
-                                    const totalWidth = (4 * fingerWidth) + (3 * spacing);
-                                    const startX = (frameWidth - totalWidth) / 2;
 
                                     overlayCanvas.width = frameWidth;
                                     overlayCanvas.height = frameHeight;
                                     overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
-                                    overlayCtx.strokeStyle = '#CCFF00';
-                                    overlayCtx.lineWidth = 2;
-
-                                    for (let i = 0; i < 4; i++) {
-                                        const xPosition = startX + i * (fingerWidth + spacing);
-                                        const yPosition = topMargin;
-
-                                        // Draw finger shape
-                                        overlayCtx.beginPath();
-                                        overlayCtx.moveTo(xPosition + fingerWidth / 2, yPosition); // Top middle
-                                        overlayCtx.quadraticCurveTo(xPosition, yPosition, xPosition, yPosition + 20); // Top left curve
-                                        overlayCtx.lineTo(xPosition, yPosition + fingerHeight - 20); // Left side
-                                        overlayCtx.quadraticCurveTo(xPosition, yPosition + fingerHeight, xPosition + fingerWidth / 2, yPosition + fingerHeight); // Bottom curve
-                                        overlayCtx.quadraticCurveTo(xPosition + fingerWidth, yPosition + fingerHeight, xPosition + fingerWidth, yPosition + fingerHeight - 20); // Bottom right curve
-                                        overlayCtx.lineTo(xPosition + fingerWidth, yPosition + 20); // Right side
-                                        overlayCtx.quadraticCurveTo(xPosition + fingerWidth, yPosition, xPosition + fingerWidth / 2, yPosition); // Top right curve
-                                        overlayCtx.stroke();
+                                    if (handImage.complete) {
+                                        drawHandImage();
+                                    } else {
+                                        handImage.onload = drawHandImage;
                                     }
+                                }
+
+                                function drawHandImage() {
+                                    const frameWidth = overlayCanvas.width;
+                                    const frameHeight = overlayCanvas.height;
+                                    const aspectRatio = handImage.width / handImage.height;
+                                    let imgWidth, imgHeight;
+
+                                    // Increase the size multiplier from 0.7 to 0.85 (85% of frame size)
+                                    if (frameWidth / frameHeight > aspectRatio) {
+                                        // Frame is wider than the image
+                                        imgHeight = frameHeight * 0.85; // Increased from 0.7 to 0.85
+                                        imgWidth = imgHeight * aspectRatio;
+                                    } else {
+                                        // Frame is taller than the image
+                                        imgWidth = frameWidth * 0.85; // Increased from 0.7 to 0.85
+                                        imgHeight = imgWidth / aspectRatio;
+                                    }
+
+                                    const xPosition = (frameWidth - imgWidth) / 2;
+                                    const yPosition = (frameHeight - imgHeight) / 2;
+
+                                    overlayCtx.drawImage(handImage, xPosition, yPosition, imgWidth, imgHeight);
 
                                     // Add text instruction
                                     overlayCtx.fillStyle = '#CCFF00';
-                                    overlayCtx.font = 'bold 16px Barlow'; // Made text bold and kept increased font size
+                                    overlayCtx.font = 'bold 18px Barlow'; // Increased font size from 16px to 18px
                                     overlayCtx.textAlign = 'center';
-                                    overlayCtx.fillText('Place your 4 fingers in the guides', frameWidth / 2, frameHeight - 30); // Moved text up
+                                    overlayCtx.fillText('Place your 4 fingers as shown', frameWidth / 2, frameHeight - 25); // Adjusted position
                                 }
 
-                                // Call this function to draw the finger guides
-                                drawFingerGuides();
-
-                                drawFingerGuides();
-
                                 function initializeCamera(facingMode) {
-                                    // Access the camera and stream the feed to the video element
                                     navigator.mediaDevices.getUserMedia({
                                         video: {
-                                            facingMode: facingMode
+                                            facingMode: facingMode,
+                                            width: { ideal: 1280 },
+                                            height: { ideal: 720 }
                                         }
                                     })
                                         .then(stream => {
                                             video.srcObject = stream;
+                                            video.onloadedmetadata = () => {
+                                                video.play();
+                                                drawFingerGuides(); // Draw guides only once when video is loaded
+                                            };
                                         })
                                         .catch(err => {
                                             console.error('Error accessing camera:', err);
                                         });
                                 }
+
+                                // Add event listener for orientation change
+                                window.addEventListener('orientationchange', () => {
+                                    setTimeout(drawFingerGuides, 100); // Redraw guides after orientation change
+                                });
+
+                                // Initialize camera when the page loads
                                 initializeCamera('environment'); // 'environment' for back camera
 
                                 // Capture image when the button is clicked
