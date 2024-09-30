@@ -129,6 +129,7 @@ body {
 .previewContainer img {
   /* width: 250px !important; */
   width: 100% !important;
+  aspect-ratio: 3/4;
   /* height: 300px !important; */
 }
 
@@ -512,7 +513,7 @@ select.list-dt:focus {
   position: relative;
   width: auto;
   height: auto;
-  aspect-ratio: 16/9;
+  aspect-ratio: 3/4;
 }
 
 #videoFeed {
