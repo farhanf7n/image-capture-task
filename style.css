@@ -6,7 +6,7 @@
 }
 
 body {
-  background-color: #FAFAF8 !important;
+  background-color: #fafaf8 !important;
 }
 
 .barlow-thin {
@@ -133,10 +133,10 @@ body {
 }
 
 #msform fieldset .form-card {
-  background-color: #F0F0ED;
+  background-color: #f0f0ed;
   border: 0 none;
   border-radius: 10px;
-  border: .125rem dashed #e4e5e1;
+  border: 0.125rem dashed #e4e5e1;
   padding: 20px 40px 40px 40px;
   box-sizing: border-box;
   width: 94%;
@@ -249,7 +249,7 @@ select.list-dt:focus {
 .card {
   padding: 30px 10px !important;
   border-radius: 10px !important;
-  border: .125rem dashed #e4e5e1 !important;
+  border: 0.125rem dashed #e4e5e1 !important;
 }
 
 /*FieldSet headings*/
@@ -512,6 +512,7 @@ select.list-dt:focus {
   position: relative;
   width: auto;
   height: auto;
+  aspect-ratio: 16/9;
 }
 
 #videoFeed {
@@ -763,7 +764,7 @@ select.list-dt:focus {
 
 /* Check Icon */
 .check-icon {
- position: absolute;
+  position: absolute;
   bottom: 25px;
   transform: translate(-50%, -50%);
   font-size: 13px;
@@ -820,7 +821,8 @@ select.list-dt:focus {
   transform: translateX(-50%);
   background-color: #f35b22;
   border-color: #be400f;
-  box-shadow: inset 0 1px 0 hsla(0,0%,100%,.2),0 1px 2px 0 rgba(24,25,22,.06);
+  box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, 0.2),
+    0 1px 2px 0 rgba(24, 25, 22, 0.06);
   color: white;
   font-size: 14px;
 }
@@ -907,7 +909,9 @@ select.list-dt:focus {
   z-index: 1;
 }
 
-.form-card h2 {color: #E7531D !important;}
+.form-card h2 {
+  color: #e7531d !important;
+}
 
 #counter {
   position: absolute;
@@ -1167,7 +1171,7 @@ select.list-dt:focus {
   content: "\f09d";
 }
 
-.check-icon.selfie-icon{
+.check-icon.selfie-icon {
   right: -3px !important;
 }
 
@@ -1184,14 +1188,14 @@ select.list-dt:focus {
   display: block;
   font-size: 18px;
   color: #ff5e24;
-  background-color: #FAFAF8;
+  background-color: #fafaf8;
   border: 1px solid #f0f0ed;
-  border-radius: .5rem;
+  border-radius: 0.5rem;
   margin: 0 auto 10px auto;
   padding: 2px;
 }
 
-#progressbar li>strong{
+#progressbar li > strong {
   font-size: 14px;
   font-weight: 500;
   line-height: 24px;
