@@ -122,14 +122,16 @@ body {
 }
 
 #msform ul {
-  display: flex;
-  justify-content: space-evenly;
+ display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
 }
 
 .previewContainer img {
   /* width: 250px !important; */
   width: 100% !important;
-  aspect-ratio: 3/4;
+  /* aspect-ratio: 3/4; */
   /* height: 300px !important; */
 }
 
