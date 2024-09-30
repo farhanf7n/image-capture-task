@@ -214,29 +214,33 @@
                                     drawBox
                                 );
 
+                                // Modify the initializeCamera function to return the stream
                                 async function initializeCamera() {
                                     try {
-                                        const stream =
-                                            await navigator.mediaDevices.getUserMedia(
-                                                {
-                                                    video: {
-                                                        facingMode: "environment",
-                                                        width: { ideal: 1920 },
-                                                        height: { ideal: 1080 },
-                                                        frameRate: { ideal: 30 },
-                                                    },
-                                                }
-                                            );
+                                        const stream = await navigator.mediaDevices.getUserMedia({
+                                            video: {
+                                                facingMode: "environment",
+                                                width: { ideal: 1920 },
+                                                height: { ideal: 1080 },
+                                                frameRate: { ideal: 30 },
+                                            },
+                                        });
                                         video.srcObject = stream;
                                         await video.play();
+                                        return stream; // Return the stream
                                     } catch (error) {
-                                        console.error(
-                                            "Error accessing camera:",
-                                            error
-                                        );
+                                        console.error("Error accessing camera:", error);
                                     }
                                 }
-                                initializeCamera(); // 'environment' for back camera
+
+                                // Store the current stream
+                                let currentStream;
+
+                                // Initialize camera and store the stream
+                                initializeCamera().then(stream => {
+                                    currentStream = stream;
+                                });
+
                                 // Capture image when the button is clicked
                                 captureButton.addEventListener(
                                     "click",
@@ -247,6 +251,7 @@
                                 );
                                 var captured_image;
 
+                                // Modify the captureImage function to use currentStream
                                 function captureImage() {
                                     $("#cameraContainer").hide();
                                     $("#loadingIndicator").show();
@@ -276,27 +281,36 @@
                                         captured_image = imageDataURL;
 
                                         // Stop the video stream
-                                        const stream = video.srcObject;
-                                        const tracks = stream.getTracks();
-                                        tracks.forEach(track => track.stop());
+                                        if (currentStream) {
+                                            currentStream.getTracks().forEach(track => track.stop());
+                                        }
                                     });
                                 }
 
                                 $("#msform").on("submit", function (e) {
                                     e.preventDefault();
                                 });
-                                $("#retakebutton").on(
-                                    "click",
-                                    function (e) {
-                                        e.preventDefault();
-                                        $("#cameraContainer").show();
-                                        $("#previewContainer").hide();
-                                        $(this).hide();
-                                        $("#next_step").hide();
-                                        $("#error_cnic_document").text("");
-                                        $('#progressbar li:nth-child(2) .check-icon').addClass('d-none');
+                                // Modify the retake button click handler
+                                $("#retakebutton").on("click", function (e) {
+                                    e.preventDefault();
+                                    $("#cameraContainer").show();
+                                    $("#previewContainer").hide();
+                                    $(this).hide();
+                                    $("#next_step").hide();
+                                    $("#error_cnic_document").text("");
+                                    $('#progressbar li:nth-child(2) .check-icon').addClass('d-none');
+
+                                    // Stop the current stream if it exists
+                                    if (currentStream) {
+                                        currentStream.getTracks().forEach(track => track.stop());
                                     }
-                                );
+
+                                    // Reinitialize the camera
+                                    initializeCamera().then(stream => {
+                                        currentStream = stream;
+                                        drawBox(); // Redraw the box
+                                    });
+                                });
 
                                 $("#next_step").on("click", function (e) {
                                     e.preventDefault();
