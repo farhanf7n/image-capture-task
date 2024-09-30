@@ -60,14 +60,12 @@
     </div>
     <!-- MultiStep Form -->
     <div class="container d-flex align-items-center" style="height: 100vh" id="">
-        <div class="row justify-content-center my-5">
+        <div class="row justify-content-center">
             <div class="col-12 col-sm-9 col-md-7 col-lg-6 text-center p-2 p-md-0 mt-0 mb-0">
                 <div class="card px-0 pt-4 pb-0 mt-3 mb-3">
                     <div class="row">
                         <div class="col-md-12 mx-0">
-
                             <form id="msform">
-
                                 <ul id="progressbar">
                                     <li class="active relative" id="document">
                                         <strong>ID Card Front</strong>
@@ -121,7 +119,6 @@
                                     let mediaRecorder;
                                     var videoData;
                                     async function main() {
-
                                         const videoLive = document.getElementById('videoLive');
                                         const overlay = document.getElementById('overlay');
                                         const counter = document.getElementById('counter');
@@ -131,74 +128,84 @@
                                         let chunks = [];
                                         let countdownInterval;
                                         let countdownSeconds = 4;
-                                        const stream = await navigator.mediaDevices.getUserMedia({ // <1>
-                                            video: true,
-                                            audio: true,
-                                        })
 
-                                        videoLive.srcObject = stream
+                                        try {
+                                            const stream = await navigator.mediaDevices.getUserMedia({
+                                                video: {
+                                                    facingMode: "user",
+                                                    width: { ideal: 1280 },
+                                                    height: { ideal: 720 },
+                                                },
+                                                audio: true,
+                                            });
 
-                                        if (!MediaRecorder.isTypeSupported('video/webm')) { // <2>
-                                            mediaRecorder = new MediaRecorder(stream, { // <3>
-                                                mimeType: 'video/mp4',
+                                            // Flip the video horizontally
+                                            videoLive.style.transform = 'scaleX(-1)';
 
-                                            })
-                                        } else {
-                                            mediaRecorder = new MediaRecorder(stream, { // <3>
-                                                mimeType: 'video/webm',
-                                            })
-                                        }
+                                            videoLive.srcObject = stream;
 
-                                        // mediaRecorder = new MediaRecorder(stream, { // <3>
-                                        //     mimeType: 'video/webm',
-                                        // })
-                                        countdownInterval = setInterval(() => {
-                                            countdownSeconds--;
-                                            if (countdownSeconds >= 0) {
-                                                counter.textContent = countdownSeconds;
+                                            if (!MediaRecorder.isTypeSupported('video/webm')) {
+                                                mediaRecorder = new MediaRecorder(stream, {
+                                                    mimeType: 'video/mp4',
+                                                });
                                             } else {
-                                                counter.textContent = '';
-                                                startRecording();
-                                                // overlay.style.display = 'none';
-                                                instruction.style.display = 'block';
-                                                leftArrow.style.display = 'block';
-                                                rightArrow.style.display = 'block';
-
-                                                setTimeout(() => {
-                                                    instruction.textContent = 'Look Straight in Circle';
-                                                    leftArrow.style.display = 'none';
-                                                    rightArrow.style.display = 'none';
-                                                }, 1000); // Display "Straight" instruction after 1 second
-
-                                                setTimeout(() => {
-                                                    instruction.textContent = 'Move your face to the left';
-                                                    leftArrow.style.display = 'block';
-                                                }, 2000); // Display "Move your face to the left" instruction after 2 seconds
-
-                                                setTimeout(() => {
-                                                    instruction.textContent = 'Move your face to the right';
-                                                    leftArrow.style.display = 'none';
-                                                    rightArrow.style.display = 'block';
-                                                }, 4000); // Display "Move your face to the right" instruction after 4 seconds
-
-                                                setTimeout(() => {
-                                                    instruction.textContent = '';
-                                                    leftArrow.style.display = 'none';
-                                                    rightArrow.style.display = 'none';
-                                                    stopRecording();
-                                                }, 6000); // Stop recording after 6 seconds
-
-                                                clearInterval(countdownInterval);
+                                                mediaRecorder = new MediaRecorder(stream, {
+                                                    mimeType: 'video/webm',
+                                                });
                                             }
-                                        }, 1000); // Countdown interval every 1 second
+
+                                            // Rest of your code remains the same
+                                            countdownInterval = setInterval(() => {
+                                                countdownSeconds--;
+                                                if (countdownSeconds >= 0) {
+                                                    counter.textContent = countdownSeconds;
+                                                } else {
+                                                    counter.textContent = '';
+                                                    startRecording();
+                                                    // overlay.style.display = 'none';
+                                                    instruction.style.display = 'block';
+                                                    leftArrow.style.display = 'block';
+                                                    rightArrow.style.display = 'block';
+
+                                                    setTimeout(() => {
+                                                        instruction.textContent = 'Look Straight in Circle';
+                                                        leftArrow.style.display = 'none';
+                                                        rightArrow.style.display = 'none';
+                                                    }, 1000); // Display "Straight" instruction after 1 second
+
+                                                    setTimeout(() => {
+                                                        instruction.textContent = 'Move your face to the left';
+                                                        leftArrow.style.display = 'block';
+                                                    }, 2000); // Display "Move your face to the left" instruction after 2 seconds
+
+                                                    setTimeout(() => {
+                                                        instruction.textContent = 'Move your face to the right';
+                                                        leftArrow.style.display = 'none';
+                                                        rightArrow.style.display = 'block';
+                                                    }, 4000); // Display "Move your face to the right" instruction after 4 seconds
+
+                                                    setTimeout(() => {
+                                                        instruction.textContent = '';
+                                                        leftArrow.style.display = 'none';
+                                                        rightArrow.style.display = 'none';
+                                                        stopRecording();
+                                                    }, 6000); // Stop recording after 6 seconds
+
+                                                    clearInterval(countdownInterval);
+                                                }
+                                            }, 1000); // Countdown interval every 1 second
 
 
-                                        mediaRecorder.addEventListener('dataavailable', event => {
-                                            videoRecorded.src = URL.createObjectURL(event.data) // <6>
-                                            videoData = event.data;
-                                            $('#next_btn').show();
-                                            $('#retakeBtn').show();
-                                        })
+                                            mediaRecorder.addEventListener('dataavailable', event => {
+                                                videoRecorded.src = URL.createObjectURL(event.data) // <6>
+                                                videoData = event.data;
+                                                $('#next_btn').show();
+                                                $('#retakeBtn').show();
+                                            })
+                                        } catch (error) {
+                                            console.error("Error accessing camera:", error);
+                                            // Handle the error (e.g., show a message to the user)
+                                        }
                                     }
                                     $("#next_btn").on("click", function () {
                                         // Show the check icon for Selfie
