@@ -77,11 +77,9 @@
 
         #cameraContainer {
             position: relative;
-            width: 300px;
-            height: 400px;
-            /* Increased from 200px to 400px */
-            margin: 0 auto;
-            overflow: hidden;
+            aspect-ratio: 3/4;
+            width: auto;
+            height: auto;
         }
 
         #videoFeed,
@@ -96,8 +94,7 @@
 
         #captureButton {
             position: absolute;
-            bottom: 10px;
-            /* Adjusted to be closer to the bottom of the taller container */
+            bottom: -35px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 10;
@@ -191,7 +188,7 @@
                                 const overlayCtx = overlayCanvas.getContext('2d');
 
                                 let handImage = new Image();
-                                handImage.src = 'Hand.png';
+                                handImage.src = 'palm-3241101.png';
 
                                 function drawFingerGuides() {
                                     const frameWidth = video.videoWidth || 300;
