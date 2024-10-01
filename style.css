@@ -515,7 +515,6 @@ select.list-dt:focus {
   position: relative;
   width: auto;
   height: auto;
-  aspect-ratio: 3/4;
 }
 
 #videoFeed {
@@ -985,7 +984,6 @@ select.list-dt:focus {
   .card h2 {
     font-size: 20px;
   }
-
 
   .form-card h4 {
     font-size: 20px;
