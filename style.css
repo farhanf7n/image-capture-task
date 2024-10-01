@@ -609,6 +609,10 @@ select.list-dt:focus {
   position: relative;
 }
 
+.fd-margin {
+  margin: 60px auto;
+}
+
 /*Hide all except first fieldset*/
 #msform fieldset:not(:first-of-type) {
   display: none;
