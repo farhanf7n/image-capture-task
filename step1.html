@@ -322,6 +322,52 @@
                               </div>
 
                               <script>
+                                // Add this function at the beginning of your script
+                                function initializeCameraOnLoad() {
+                                  if (document.readyState === "complete") {
+                                    initializeCamera();
+                                  } else {
+                                    window.addEventListener('load', initializeCamera);
+                                  }
+                                }
+
+                                // Modify the initializeCamera function
+                                async function initializeCamera() {
+                                  try {
+                                    const stream = await navigator.mediaDevices.getUserMedia({
+                                      video: {
+                                        facingMode: "environment",
+                                        width: { ideal: 1280 },
+                                        height: { ideal: 720 },
+                                        frameRate: { ideal: 30 },
+                                      },
+                                    });
+                                    video.srcObject = stream;
+                                    await video.play();
+                                    drawBox(); // Call drawBox after the video starts playing
+                                  } catch (error) {
+                                    console.error("Error accessing camera:", error);
+                                    // Handle the error (e.g., show a message to the user)
+                                  }
+                                }
+
+                                // Call this function instead of directly calling initializeCamera
+                                initializeCameraOnLoad();
+
+                                // Modify the retake button click handler
+                                $("#retakebutton").on("click", function (e) {
+                                  e.preventDefault();
+                                  $("#cameraContainer").show();
+                                  $("#previewContainer").hide();
+                                  $(this).hide();
+                                  $("#next_step").hide();
+                                  $("#error_cnic_document").text("");
+                                  $('#progressbar li:first-child .check-icon').addClass('d-none');
+
+                                  // Reinitialize the camera
+                                  initializeCamera();
+                                });
+
                                 const video =
                                   document.getElementById("videoFeed");
                                 const previewContainer =
@@ -426,29 +472,6 @@
                                   drawBox
                                 );
 
-                                async function initializeCamera() {
-                                  try {
-                                    const stream =
-                                      await navigator.mediaDevices.getUserMedia(
-                                        {
-                                          video: {
-                                            facingMode: "environment",
-                                            width: { ideal: 1280 },
-                                            height: { ideal: 720 },
-                                            frameRate: { ideal: 30 },
-                                          },
-                                        }
-                                      );
-                                    video.srcObject = stream;
-                                    await video.play();
-                                  } catch (error) {
-                                    console.error(
-                                      "Error accessing camera:",
-                                      error
-                                    );
-                                  }
-                                }
-                                initializeCamera(); // 'environment' for back camera
                                 // Capture image when the button is clicked
                                 captureButton.addEventListener(
                                   "click",
@@ -556,17 +579,6 @@
                                 $("#msform").on("submit", function (e) {
                                   e.preventDefault();
                                 });
-                                $("#retakebutton").on(
-                                  "click",
-                                  function (e) {
-                                    e.preventDefault();
-                                    $("#cameraContainer").show();
-                                    $("#previewContainer").hide();
-                                    $(this).hide();
-                                    $("#next_step").hide();
-                                    $("#error_cnic_document").text("");
-                                  }
-                                );
 
                                 $("#next_step").on("click", function (e) {
                                   e.preventDefault();

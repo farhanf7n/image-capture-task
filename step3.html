@@ -118,6 +118,14 @@
                                 <script>
                                     let mediaRecorder;
                                     var videoData;
+                                    function initializeCameraOnLoad() {
+                                        if (document.readyState === "complete") {
+                                            main();
+                                        } else {
+                                            window.addEventListener('load', main);
+                                        }
+                                    }
+
                                     async function main() {
                                         const videoLive = document.getElementById('videoLive');
                                         const overlay = document.getElementById('overlay');
@@ -143,6 +151,7 @@
                                             videoLive.style.transform = 'scaleX(-1)';
 
                                             videoLive.srcObject = stream;
+                                            videoLive.play();
 
                                             if (!MediaRecorder.isTypeSupported('video/webm')) {
                                                 mediaRecorder = new MediaRecorder(stream, {
@@ -234,8 +243,20 @@
                                         }
                                     }
 
+                                    initializeCameraOnLoad();
 
-                                    main()
+                                    // Modify the retake button click handler
+                                    $("#retakeBtn").on("click", function (e) {
+                                        e.preventDefault();
+                                        $('.recording_div').show();
+                                        $('#preview_div').hide();
+                                        $(this).hide();
+                                        $('#next_btn').hide();
+                                        $('#progressbar li:nth-child(3) .check-icon').addClass('d-none');
+
+                                        // Reinitialize the camera
+                                        main();
+                                    });
                                 </script>
                         </div>
                     </div>

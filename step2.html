@@ -214,6 +214,15 @@
                                     drawBox
                                 );
 
+                                // Add this function at the beginning of your script
+                                function initializeCameraOnLoad() {
+                                    if (document.readyState === "complete") {
+                                        initializeCamera();
+                                    } else {
+                                        window.addEventListener('load', initializeCamera);
+                                    }
+                                }
+
                                 // Modify the initializeCamera function to return the stream
                                 async function initializeCamera() {
                                     try {
@@ -227,6 +236,7 @@
                                         });
                                         video.srcObject = stream;
                                         await video.play();
+                                        drawBox(); // Call drawBox after the video starts playing
                                         return stream; // Return the stream
                                     } catch (error) {
                                         console.error("Error accessing camera:", error);
@@ -237,9 +247,7 @@
                                 let currentStream;
 
                                 // Initialize camera and store the stream
-                                initializeCamera().then(stream => {
-                                    currentStream = stream;
-                                });
+                                initializeCameraOnLoad();
 
                                 // Capture image when the button is clicked
                                 captureButton.addEventListener(
@@ -308,7 +316,6 @@
                                     // Reinitialize the camera
                                     initializeCamera().then(stream => {
                                         currentStream = stream;
-                                        drawBox(); // Redraw the box
                                     });
                                 });
 
