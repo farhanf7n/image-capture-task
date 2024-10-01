@@ -178,38 +178,6 @@
 
 
                             <script>
-                                // Add this function at the beginning of your script
-                                function initializeCameraOnLoad() {
-                                    if (document.readyState === "complete") {
-                                        initializeCamera();
-                                    } else {
-                                        window.addEventListener('load', initializeCamera);
-                                    }
-                                }
-
-                                // Modify the initializeCamera function
-                                async function initializeCamera() {
-                                    try {
-                                        const stream = await navigator.mediaDevices.getUserMedia({
-                                            video: {
-                                                facingMode: "environment",
-                                                width: { ideal: 1280 },
-                                                height: { ideal: 720 },
-                                                frameRate: { ideal: 30 },
-                                            },
-                                        });
-                                        video.srcObject = stream;
-                                        await video.play();
-                                        drawBox(); // Call drawBox after the video starts playing
-                                    } catch (error) {
-                                        console.error("Error accessing camera:", error);
-                                        // Handle the error (e.g., show a message to the user)
-                                    }
-                                }
-
-                                // Call this function instead of directly calling initializeCamera
-                                initializeCameraOnLoad();
-
                                 const video = document.getElementById('videoFeed');
                                 const previewContainer = document.getElementById('previewContainer');
                                 const overlayCanvas = document.getElementById('overlayCanvas');
@@ -263,10 +231,51 @@
                                     overlayCtx.textAlign = 'center';
                                 }
 
+                                function initializeCamera(facingMode) {
+                                    navigator.mediaDevices.getUserMedia({
+                                        video: {
+                                            facingMode: facingMode,
+                                            width: { exact: 300 },
+                                            height: { exact: 400 }  // Increased from 200 to 400
+                                        }
+                                    })
+                                        .then(stream => {
+                                            video.srcObject = stream;
+                                            video.onloadedmetadata = () => {
+                                                video.play();
+                                                drawFingerGuides();
+                                            };
+                                        })
+                                        .catch(err => {
+                                            console.error('Error accessing camera:', err);
+                                            // If exact constraints fail, try with ideal constraints
+                                            navigator.mediaDevices.getUserMedia({
+                                                video: {
+                                                    facingMode: facingMode,
+                                                    width: { ideal: 300 },
+                                                    height: { ideal: 400 }  // Increased from 200 to 400
+                                                }
+                                            })
+                                                .then(stream => {
+                                                    video.srcObject = stream;
+                                                    video.onloadedmetadata = () => {
+                                                        video.play();
+                                                        drawFingerGuides();
+                                                    };
+                                                })
+                                                .catch(err => {
+                                                    console.error('Error accessing camera with ideal constraints:', err);
+                                                });
+                                        });
+                                }
+
                                 // Add event listener for orientation change
                                 window.addEventListener('orientationchange', () => {
                                     setTimeout(drawFingerGuides, 100); // Redraw guides after orientation change
                                 });
+
+                                // Initialize camera when the page loads
+                                initializeCamera('environment'); // 'environment' for back camera
 
                                 // Capture image when the button is clicked
                                 captureButton.addEventListener('click', () => {
@@ -307,12 +316,9 @@
                                     $('#cameraContainer').show();
                                     $('#previewContainer').hide();
                                     $(this).hide();
-                                    $('#next_step').hide();
+                                    $('#next_step').hide();  // Hide the next step button
                                     $('#error_finger_prints').text('');
-                                    $('#progressbar li:nth-child(4) .check-icon').addClass('d-none');
-
-                                    // Reinitialize the camera
-                                    initializeCamera();
+                                    $('#progressbar li:nth-child(2) .check-icon').addClass('d-none');
                                 });
 
                                 $(document).ready(function () {
