@@ -78,7 +78,7 @@
         #cameraContainer {
             position: relative;
             width: auto;
-            height: auto;
+            height: 220px;
         }
 
         #videoFeed,
@@ -108,7 +108,7 @@
         <p>Loading..</p>
     </div>
     <!-- MultiStep Form -->
-    <div class="container d-flex align-items-center" style="min-height: 100vh" id="">
+    <div class="container d-flex align-items-center" style="height: 100vh" id="">
         <div class="row justify-content-center mt-0">
             <div class="col-12 col-sm-9 col-md-7 col-lg-6 text-center p-2 p-md-0 mt-0 mb-0">
                 <div class="card px-0 pt-4 pb-0 mt-3 mb-3">
@@ -167,12 +167,17 @@
                                         <div class="previewContainer" id="previewContainer">
                                         </div>
                                         <span class="error" style="color:red" id="error_finger_prints"></span>
-
+                                        <div class="retake_btn">
+                                            <button class="btn btn-danger btn-sm mt-2" style="display: none"
+                                                id="retakebutton">
+                                                Retake
+                                            </button>
+                                            <button class="btn btn-primary btn-sm mt-2" style="display: none"
+                                                id="next_step">
+                                                Next Step
+                                            </button>
+                                        </div>
                                     </div>
-                                    <button class="btn btn-danger btn-sm mt-2" style="display: none"
-                                        id="retakebutton">Retake</button>
-                                    <button class="btn btn-primary btn-sm mt-2" style="display: none"
-                                        id="next_step">Next Step</button>
                                 </fieldset>
                             </form>
 
@@ -191,7 +196,7 @@
 
                                 function drawFingerGuides() {
                                     const frameWidth = video.videoWidth || 300;
-                                    const frameHeight = video.videoHeight || 200;
+                                    const frameHeight = video.videoHeight || 400;
 
                                     overlayCanvas.width = frameWidth;
                                     overlayCanvas.height = frameHeight;
@@ -232,13 +237,15 @@
                                 }
 
                                 function initializeCamera(facingMode) {
-                                    navigator.mediaDevices.getUserMedia({
+                                    const constraints = {
                                         video: {
                                             facingMode: facingMode,
-                                            width: { exact: 300 },
-                                            height: { exact: 400 }  // Increased from 200 to 400
+                                            width: { ideal: 300 },
+                                            height: { ideal: 400 }
                                         }
-                                    })
+                                    };
+
+                                    navigator.mediaDevices.getUserMedia(constraints)
                                         .then(stream => {
                                             video.srcObject = stream;
                                             video.onloadedmetadata = () => {
@@ -247,15 +254,9 @@
                                             };
                                         })
                                         .catch(err => {
-                                            console.error('Error accessing camera:', err);
-                                            // If exact constraints fail, try with ideal constraints
-                                            navigator.mediaDevices.getUserMedia({
-                                                video: {
-                                                    facingMode: facingMode,
-                                                    width: { ideal: 300 },
-                                                    height: { ideal: 400 }  // Increased from 200 to 400
-                                                }
-                                            })
+                                            console.error('Error accessing camera with ideal constraints:', err);
+                                            // If ideal constraints fail, try with no specific resolution
+                                            navigator.mediaDevices.getUserMedia({ video: { facingMode: facingMode } })
                                                 .then(stream => {
                                                     video.srcObject = stream;
                                                     video.onloadedmetadata = () => {
@@ -264,7 +265,8 @@
                                                     };
                                                 })
                                                 .catch(err => {
-                                                    console.error('Error accessing camera with ideal constraints:', err);
+                                                    console.error('Error accessing camera with fallback constraints:', err);
+                                                    // Handle the error (e.g., show a message to the user)
                                                 });
                                         });
                                 }
