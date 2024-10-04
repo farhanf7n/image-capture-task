@@ -363,18 +363,14 @@
                                     const stream = await navigator.mediaDevices.getUserMedia({
                                       video: {
                                         facingMode: "environment",
-                                        width: { ideal: 1280 },
-                                        height: { ideal: 760 },  // Changed from 720 to 760
+                                        width: { ideal: 930 }, //1280,
+                                        height: { ideal: 690 }, //720
+                                        frameRate: { ideal: 30 },
                                       },
                                     });
                                     video.srcObject = stream;
                                     await video.play();
-
-                                    // Set the canvas size to match the video feed
-                                    overlayCanvas.width = video.videoWidth;
-                                    overlayCanvas.height = 760;  // Set to 760 explicitly
-
-                                    drawBox(); // Call drawBox after setting up the video and canvas
+                                    drawBox(); // Call drawBox after the video starts playing
                                   } catch (error) {
                                     console.error("Error accessing camera:", error);
                                     // Handle the error (e.g., show a message to the user)
@@ -414,8 +410,8 @@
 
                                 // Function to draw a box border on the overlay canvas
                                 function drawBox() {
-                                  const frameWidth = video.videoWidth || 1280;
-                                  const frameHeight = 760;  // Use 760 instead of video.videoHeight
+                                  const frameWidth = video.videoWidth || 200;
+                                  const frameHeight = video.videoHeight || 150;
 
                                   // Set the size of the overlay canvas
                                   overlayCanvas.width = frameWidth;
