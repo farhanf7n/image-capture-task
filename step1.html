@@ -363,8 +363,8 @@
                                     const stream = await navigator.mediaDevices.getUserMedia({
                                       video: {
                                         facingMode: "environment",
-                                        width: { ideal: 930 }, //1280, 950
-                                        height: { ideal: 730 }, //720, 690(main), 730
+                                        width: { ideal: 930 }, //1280
+                                        height: { ideal: 690 }, //720
                                         frameRate: { ideal: 30 },
                                       },
                                     });
@@ -411,7 +411,7 @@
                                 // Function to draw a box border on the overlay canvas
                                 function drawBox() {
                                   const frameWidth = video.videoWidth || 200;
-                                  const frameHeight = video.videoHeight || 150;
+                                  const frameHeight = video.videoHeight || 180; //150
 
                                   // Set the size of the overlay canvas
                                   overlayCanvas.width = frameWidth;
