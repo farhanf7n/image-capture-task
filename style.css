@@ -627,6 +627,7 @@ select.list-dt:focus {
 }
 
 #overlayCanvas {
+  margin: 0px 20px !important;
   position: absolute;
   top: 0px !important; /* -5px */
   left: 0;
