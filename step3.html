@@ -47,6 +47,19 @@
         .right-arrow {
             right: 20px;
         }
+
+        #circular-progress {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
     </style>
 
     <meta name="csrf-token" content="">
@@ -103,7 +116,15 @@
                                 <fieldset>
                                     <div class="recording_div">
                                         <video autoplay muted playsinline id="videoLive"></video>
-                                        <div id="overlay"></div>
+                                        <div id="circular-progress">
+                                            <svg width="120" height="120" viewBox="0 0 120 120">
+                                                <circle cx="60" cy="60" r="54" fill="none" stroke="#e0e0e0"
+                                                    stroke-width="2" />
+                                                <circle cx="60" cy="60" r="54" fill="none" stroke="#ff5e24"
+                                                    stroke-width="2" stroke-dasharray="339.292"
+                                                    stroke-dashoffset="339.292" class="progress-ring__circle" />
+                                            </svg>
+                                        </div>
                                         <div id="counter"></div>
                                         <p id="instruction">Look Straight in Circle</p>
                                         <!-- <i class="fas fa-arrow-left arrow-icon left-arrow"></i>
@@ -137,7 +158,6 @@
 
                                     async function main() {
                                         const videoLive = document.getElementById('videoLive');
-                                        const overlay = document.getElementById('overlay');
                                         const counter = document.getElementById('counter');
                                         const instruction = document.getElementById('instruction');
                                         const leftArrow = document.querySelector('.left-arrow');
@@ -145,6 +165,7 @@
                                         let chunks = [];
                                         let countdownInterval;
                                         let countdownSeconds = 4;
+                                        const recordingDuration = 6; // Define the recording duration in seconds
 
                                         try {
                                             const stream = await navigator.mediaDevices.getUserMedia({
@@ -182,11 +203,15 @@
                                                     counter.textContent = countdownSeconds;
                                                 } else {
                                                     counter.textContent = '';
+                                                    document.getElementById('circular-progress').style.display = 'block'; // Show the progress indicator
                                                     startRecording();
-                                                    // overlay.style.display = 'none';
+                                                    recordingStartTime = Date.now();
                                                     instruction.style.display = 'block';
-                                                    leftArrow.style.display = 'block';
-                                                    rightArrow.style.display = 'block';
+
+                                                    // Start updating the progress bar
+                                                    const progressInterval = setInterval(() => {
+                                                        updateProgressBar(recordingStartTime, recordingDuration);
+                                                    }, 100); // Update every 100ms for smoother animation
 
                                                     setTimeout(() => {
                                                         instruction.textContent = 'Look Straight in Circle';
@@ -209,8 +234,10 @@
                                                         instruction.textContent = '';
                                                         leftArrow.style.display = 'none';
                                                         rightArrow.style.display = 'none';
+                                                        document.getElementById('circular-progress').style.display = 'none'; // Hide the progress indicator
                                                         stopRecording();
-                                                    }, 6000); // Stop recording after 6 seconds
+                                                        clearInterval(progressInterval); // Stop updating progress bar
+                                                    }, recordingDuration * 1000);
 
                                                     clearInterval(countdownInterval);
                                                 }
@@ -244,12 +271,18 @@
                                     function startRecording() {
                                         if (mediaRecorder && mediaRecorder.state === 'inactive') {
                                             mediaRecorder.start();
+                                            const circle = document.querySelector('.progress-ring__circle');
+                                            const radius = circle.r.baseVal.value;
+                                            const circumference = radius * 2 * Math.PI;
+                                            circle.style.strokeDashoffset = circumference; // Reset progress
                                         }
                                     }
 
                                     function stopRecording() {
                                         if (mediaRecorder && mediaRecorder.state === 'recording') {
                                             mediaRecorder.stop();
+                                            const circle = document.querySelector('.progress-ring__circle');
+                                            circle.style.strokeDashoffset = 0; // Complete progress
                                             $('.recording_div').hide();
                                             $('#preview_div').show();
                                         }
@@ -269,6 +302,18 @@
                                         // Reinitialize the camera
                                         main();
                                     });
+
+                                    function updateProgressBar(startTime, duration) {
+                                        const circle = document.querySelector('.progress-ring__circle');
+                                        const radius = circle.r.baseVal.value;
+                                        const circumference = radius * 2 * Math.PI;
+
+                                        const elapsedTime = (Date.now() - startTime) / 1000; // Convert to seconds
+                                        const progress = Math.min((elapsedTime / duration), 1);
+
+                                        const offset = circumference - progress * circumference;
+                                        circle.style.strokeDashoffset = offset;
+                                    }
                                 </script>
                         </div>
                     </div>
