@@ -128,43 +128,53 @@
 
                                 // Function to draw a box border on the overlay canvas
                                 function drawBox() {
-                                    const frameWidth =
-                                        video.videoWidth || 200; // Use video width if available, else fallback to 300
-                                    const frameHeight =
-                                        video.videoHeight || 150; // Use video height if available, else fallback to 200
-                                    const boxWidth = frameWidth * 0.8; // 80% of frame width
-                                    const boxHeight = frameHeight * 0.8; // 80% of frame height
-                                    const borderRadius = 2; // Border radius
-
-                                    const boxX = (frameWidth - boxWidth) / 2; // Calculate X position of the box
-                                    const boxY =
-                                        (frameHeight - boxHeight) / 2; // Calculate Y position of the box
+                                    const frameWidth = video.videoWidth || 200;
+                                    const frameHeight = video.videoHeight || 150;
 
                                     // Set the size of the overlay canvas
                                     overlayCanvas.width = frameWidth;
                                     overlayCanvas.height = frameHeight;
 
                                     // Clear the overlay canvas
-                                    overlayCtx.clearRect(
-                                        0,
-                                        0,
-                                        overlayCanvas.width,
-                                        overlayCanvas.height
-                                    );
+                                    overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
-                                    // Draw the rounded box on the overlay canvas
-                                    overlayCtx.strokeStyle = "#CCFF00";
-                                    overlayCtx.lineWidth = 4;
+                                    // Create an Image object
+                                    const idCardImage = new Image();
+                                    idCardImage.src = 'id-card-front.png'; // Make sure this path is correct
 
-                                    // Function to draw rounded rectangle
-                                    drawRoundedRect(
-                                        overlayCtx,
-                                        boxX,
-                                        boxY,
-                                        boxWidth,
-                                        boxHeight,
-                                        borderRadius
-                                    );
+                                    // When the image loads, draw it on the canvas
+                                    idCardImage.onload = function () {
+                                        // Set the global alpha (opacity)
+                                        overlayCtx.globalAlpha = 0.3;
+
+                                        // Calculate the size to maintain aspect ratio and fit within the frame
+                                        // Note: We swap width and height here because we're rotating the image
+                                        const scale = Math.min(frameWidth / idCardImage.height, frameHeight / idCardImage.width);
+                                        const newWidth = idCardImage.height * scale;
+                                        const newHeight = idCardImage.width * scale;
+
+                                        // Calculate position to center the image
+                                        const x = (frameWidth - newWidth) / 2;
+                                        const y = (frameHeight - newHeight) / 2;
+
+                                        // Save the current context state
+                                        overlayCtx.save();
+
+                                        // Translate to the center of where we want to draw the image
+                                        overlayCtx.translate(x + newWidth / 2, y + newHeight / 2);
+
+                                        // Rotate the context 90 degrees clockwise
+                                        overlayCtx.rotate(Math.PI / 2);
+
+                                        // Draw the image
+                                        overlayCtx.drawImage(idCardImage, -newHeight / 2, -newWidth / 2, newHeight, newWidth);
+
+                                        // Restore the context state
+                                        overlayCtx.restore();
+
+                                        // Reset the global alpha for future drawings
+                                        overlayCtx.globalAlpha = 1.0;
+                                    };
                                 }
 
                                 function drawRoundedRect(
@@ -230,8 +240,8 @@
                                         const stream = await navigator.mediaDevices.getUserMedia({
                                             video: {
                                                 facingMode: "environment",
-                                                width: { ideal: 930 }, //1280, 950
-                                                height: { ideal: 690 }, //720
+                                                width: { ideal: 930 },
+                                                height: { ideal: 690 },
                                                 frameRate: { ideal: 30 },
                                             },
                                         });
@@ -263,37 +273,58 @@
                                 // Modify the captureImage function to use currentStream
                                 function captureImage() {
                                     $("#cameraContainer").hide();
-                                    $("#loadingIndicator").show();
-
-                                    const canvas = document.createElement("canvas");
+                                    const canvas =
+                                        document.createElement("canvas");
                                     const ctx = canvas.getContext("2d");
-                                    canvas.width = video.videoWidth;
-                                    canvas.height = video.videoHeight;
 
-                                    createImageBitmap(video).then(bitmap => {
-                                        ctx.drawImage(bitmap, 0, 0);
-                                        const imageDataURL = canvas.toDataURL('image/png');
+                                    // Set canvas size to a smaller, fixed size
+                                    const targetWidth = 1280; // Adjust this value as needed
+                                    const targetHeight =
+                                        (video.videoHeight / video.videoWidth) *
+                                        targetWidth;
 
-                                        const img = new Image();
-                                        img.onload = function () {
-                                            previewContainer.innerHTML = '';
-                                            previewContainer.appendChild(img);
-                                            $("#previewContainer").show();
-                                            $("#retakebutton").show();
-                                            $("#next_step").show();
+                                    canvas.width = targetWidth;
+                                    canvas.height = targetHeight;
 
-                                            // Show the check icon for ID Card Back
-                                            $('#progressbar li:nth-child(2) .check-icon').removeClass('d-none');
-                                            $("#loadingIndicator").hide();
-                                        };
-                                        img.src = imageDataURL;
-                                        captured_image = imageDataURL;
+                                    // Draw the video frame onto the canvas, scaling it down
+                                    ctx.drawImage(
+                                        video,
+                                        0,
+                                        0,
+                                        targetWidth,
+                                        targetHeight
+                                    );
 
-                                        // Stop the video stream
-                                        if (currentStream) {
-                                            currentStream.getTracks().forEach(track => track.stop());
-                                        }
-                                    });
+                                    // Apply a subtle sharpening filter (optional, remove if it's too slow)
+                                    applySharpening(
+                                        ctx,
+                                        targetWidth,
+                                        targetHeight
+                                    );
+
+                                    // Convert to JPEG with reduced quality
+                                    const imageDataURL = canvas.toDataURL(
+                                        "image/jpeg",
+                                        0.85
+                                    ); // Adjust quality (0.85 = 85%) as needed
+
+                                    // Create image element and set source
+                                    const img = new Image();
+                                    img.onload = function () {
+                                        // Clear previous content and append new image
+                                        previewContainer.innerHTML = "";
+                                        previewContainer.appendChild(img);
+                                        $("#previewContainer").show();
+                                        $("#retakebutton").show();
+                                        $("#next_step").show();
+
+                                        // Show the check icon for ID Card Front
+                                        $(
+                                            "#progressbar li:first-child .check-icon"
+                                        ).removeClass("d-none");
+                                    };
+                                    img.src = imageDataURL;
+                                    captured_image = imageDataURL;
                                 }
 
                                 $("#msform").on("submit", function (e) {
