@@ -65,14 +65,12 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-    <script src=""></script>
-
 </head>
 
 <body>
     <div id="loader">
         <div class="spinner"></div>
-        <p>Loading..</p>
+        <p>Loading...</p>
     </div>
     <!-- MultiStep Form -->
     <div class="container d-flex align-items-center" style="min-height: 100vh" id="">
@@ -190,7 +188,6 @@
                                                 });
                                             }
 
-                                            // Rest of your code remains the same
                                             countdownInterval = setInterval(() => {
                                                 countdownSeconds--;
                                                 if (countdownSeconds >= 0) {
@@ -239,14 +236,13 @@
 
 
                                             mediaRecorder.addEventListener('dataavailable', event => {
-                                                videoRecorded.src = URL.createObjectURL(event.data) // <6>
+                                                videoRecorded.src = URL.createObjectURL(event.data)
                                                 videoData = event.data;
                                                 $('#next_btn').show();
                                                 $('#retakeBtn').show();
                                             })
                                         } catch (error) {
                                             console.error("Error accessing camera:", error);
-                                            // Handle the error (e.g., show a message to the user)
                                         }
                                     }
                                     $("#next_btn").on("click", function () {
@@ -315,8 +311,6 @@
             </div>
         </div>
     </div>
-
-
     <script>
         $(document).ready(function () {
             $(".submit").click(function () {
@@ -353,5 +347,4 @@
         }
     </script>
 </body>
-
 </html>

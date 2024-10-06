@@ -1,427 +1,481 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Step - 4</title>
 
     <!-- Favicon   -->
     <link rel="icon" type="image/png" href="shield-check.png" />
 
     <!-- Bootstrap css  -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
 
     <!-- Font awesome css  -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css"
+    />
 
     <!-- Custom css -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
 
     <!-- Google fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-        href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet" />
+      href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
 
-    <meta name="csrf-token" content="">
+    <meta name="csrf-token" content="" />
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 
     <style>
-        .popup-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-        }
+      .popup-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 1000;
+      }
 
-        .popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            text-align: center;
-            z-index: 1001;
-        }
+      .popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        text-align: center;
+        z-index: 1001;
+      }
 
-        .popup-close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 24px;
-            cursor: pointer;
-            background: #f0f0f0;
-            width: 30px;
-            height: 30px;
-            line-height: 30px;
-            text-align: center;
-            border-radius: 50%;
-        }
+      .popup-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 24px;
+        cursor: pointer;
+        background: #f0f0f0;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        border-radius: 50%;
+      }
 
-        .popup-icon {
-            font-size: 48px;
-            color: green;
-            margin-bottom: 20px;
-        }
+      .popup-icon {
+        font-size: 48px;
+        color: green;
+        margin-bottom: 20px;
+      }
 
-        .popup-content {
-            padding: 20px;
-        }
+      .popup-content {
+        padding: 20px;
+      }
 
-        #cameraContainer {
-            position: relative;
-            width: auto;
-            height: 320px;
-        }
+      #cameraContainer {
+        position: relative;
+        width: auto;
+        height: 320px;
+      }
 
-        #videoFeed,
-        #overlayCanvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+      #videoFeed,
+      #overlayCanvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
 
-        #captureButton {
-            position: absolute;
-            bottom: -35px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-        }
+      #captureButton {
+        position: absolute;
+        bottom: -35px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+      }
     </style>
+  </head>
 
-</head>
-
-<body>
+  <body>
     <div id="loader">
-        <div class="spinner"></div>
-        <p>Loading..</p>
+      <div class="spinner"></div>
+      <p>Loading...</p>
     </div>
     <!-- MultiStep Form -->
-    <div class="container d-flex align-items-center" style="min-height: 100vh" id="">
-        <div class="row justify-content-center mt-0">
-            <div class="col-12 col-sm-9 col-md-7 col-lg-6 text-center p-2 p-md-0 mt-0 mb-0">
-                <div class="card px-0 pt-4 pb-0 mt-3 mb-3">
-                    <div class="row">
-                        <div class="col-md-12 mx-0">
-                            <form id="msform">
-                                <ul id="progressbar">
-                                    <li class="active relative" id="document">
-                                        <strong>ID Card Front</strong>
-                                        <div class="check-icon d-none">
-                                            <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                                        </div>
-                                    </li>
-                                    <li id="document">
-                                        <strong>ID Card Back</strong>
-                                        <div class="check-icon d-none">
-                                            <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                                        </div>
-                                    </li>
-                                    <li id="selfie">
-                                        <strong>Selfie</strong>
-                                        <div class="check-icon d-none selfie-icon">
-                                            <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                                        </div>
-                                    </li>
-                                    <li class="active relative" id="confirm">
-                                        <strong>Fingerprint</strong>
-                                        <div class="check-icon d-none">
-                                            <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <div class="row justify-content-center" style="margin-bottom: 16px;">
-                                    <div class="col-12 text-center">
-                                        <p style="opacity: 0.7; margin-bottom: unset;">Step 4 of 4</p>
-                                    </div>
-                                </div>
-                                <fieldset>
-                                    <div class="form-card">
-                                        <h2 class="barlow-bold text-left" style="
-                         font-size: 20px;
-                         line-height: 30px;
-                         font-weight: 600;
-                         color: #1c2022;
-                       ">Upload Your Fingerprint</h2>
-                                        <p class="pg-text">Please line your fingers with the image and then take a
-                                            photo.</p>
-                                        <div id="cameraContainer">
-                                            <video id="videoFeed" autoplay playsinline></video>
-                                            <canvas id="overlayCanvas"></canvas>
-                                            <button id="captureButton" class="btn btn-primary btn-sm">Capture
-                                                Image</button>
-                                        </div>
-                                        <div class="previewContainer" id="previewContainer">
-                                        </div>
-                                        <span class="error" style="color:red" id="error_finger_prints"></span>
-                                        <div class="retake_btn">
-                                            <button class="btn btn-danger btn-sm mt-2" style="display: none"
-                                                id="retakebutton">
-                                                Retake
-                                            </button>
-                                            <button class="btn btn-primary btn-sm mt-2" style="display: none"
-                                                id="next_step">
-                                                Next Step
-                                            </button>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                            </form>
-
-
-                            <script>
-                                const video = document.getElementById('videoFeed');
-                                const previewContainer = document.getElementById('previewContainer');
-                                const overlayCanvas = document.getElementById('overlayCanvas');
-                                const captureButton = document.getElementById('captureButton');
-                                const retakeButton = document.getElementById('retakebutton');
-                                const nextStepButton = document.getElementById('next_step');
-                                const overlayCtx = overlayCanvas.getContext('2d');
-
-                                let handImage = new Image();
-                                handImage.src = 'palm-3241101.png';
-
-                                function drawFingerGuides() {
-                                    const frameWidth = video.videoWidth || 300;
-                                    const frameHeight = video.videoHeight || 400;
-
-                                    overlayCanvas.width = frameWidth;
-                                    overlayCanvas.height = frameHeight;
-                                    overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
-
-                                    if (handImage.complete) {
-                                        drawHandImage();
-                                    } else {
-                                        handImage.onload = drawHandImage;
-                                    }
-                                }
-
-                                function drawHandImage() {
-                                    const frameWidth = overlayCanvas.width;
-                                    const frameHeight = overlayCanvas.height;
-                                    const aspectRatio = handImage.width / handImage.height;
-                                    let imgWidth, imgHeight;
-
-                                    // Adjust the size multiplier as needed
-                                    imgHeight = frameHeight * 0.9; // Increased to use more of the vertical space
-                                    imgWidth = imgHeight * aspectRatio;
-
-                                    // If the image is too wide, scale it down
-                                    if (imgWidth > frameWidth * 0.9) {
-                                        imgWidth = frameWidth * 0.9;
-                                        imgHeight = imgWidth / aspectRatio;
-                                    }
-
-                                    const xPosition = (frameWidth - imgWidth) / 2;
-                                    const yPosition = (frameHeight - imgHeight) / 2;
-
-                                    overlayCtx.drawImage(handImage, xPosition, yPosition, imgWidth, imgHeight);
-
-                                    // Add text instruction
-                                    overlayCtx.fillStyle = '#CCFF00';
-                                    overlayCtx.font = 'bold 18px Barlow';
-                                    overlayCtx.textAlign = 'center';
-                                }
-
-                                function initializeCamera(facingMode) {
-                                    const constraints = {
-                                        video: {
-                                            facingMode: facingMode,
-                                            width: { ideal: 300 },
-                                            height: { ideal: 400 }
-                                        }
-                                    };
-
-                                    navigator.mediaDevices.getUserMedia(constraints)
-                                        .then(stream => {
-                                            video.srcObject = stream;
-                                            video.onloadedmetadata = () => {
-                                                video.play();
-                                                drawFingerGuides();
-                                            };
-                                        })
-                                        .catch(err => {
-                                            console.error('Error accessing camera with ideal constraints:', err);
-                                            // If ideal constraints fail, try with no specific resolution
-                                            navigator.mediaDevices.getUserMedia({ video: { facingMode: facingMode } })
-                                                .then(stream => {
-                                                    video.srcObject = stream;
-                                                    video.onloadedmetadata = () => {
-                                                        video.play();
-                                                        drawFingerGuides();
-                                                    };
-                                                })
-                                                .catch(err => {
-                                                    console.error('Error accessing camera with fallback constraints:', err);
-                                                    // Handle the error (e.g., show a message to the user)
-                                                });
-                                        });
-                                }
-
-                                // Add event listener for orientation change
-                                window.addEventListener('orientationchange', () => {
-                                    setTimeout(drawFingerGuides, 100); // Redraw guides after orientation change
-                                });
-
-                                // Initialize camera when the page loads
-                                initializeCamera('environment'); // 'environment' for back camera
-
-                                // Capture image when the button is clicked
-                                captureButton.addEventListener('click', () => {
-                                    captureImage();
-                                    // Perform image capture logic here
-                                });
-                                var captured_image;
-
-                                function captureImage() {
-                                    $('#cameraContainer').hide();
-                                    const canvas = document.createElement('canvas'); // Create a temporary canvas
-                                    canvas.width = video.videoWidth; // Set canvas width to video width
-                                    canvas.height = video.videoHeight; // Set canvas height to video height
-                                    const ctx = canvas.getContext('2d');
-
-                                    // Draw the video frame onto the canvas
-                                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-                                    const imageDataURL = canvas.toDataURL(); // Get image data as base64 URL
-                                    const img = new Image();
-                                    img.src = imageDataURL;
-                                    captured_image = imageDataURL;
-                                    // Display captured image preview
-                                    previewContainer.innerHTML = '';
-                                    previewContainer.appendChild(img);
-                                    $('#previewContainer').show();
-                                    $('#retakebutton').show();
-                                    $('#next_step').show();
-
-                                    // Show the check icon for ID Card Back
-                                    $('#progressbar li:nth-child(2) .check-icon').removeClass('d-none');
-                                }
-                                $('#msform').on('submit', function (e) {
-                                    e.preventDefault();
-                                })
-                                $('#retakebutton').on('click', function (e) {
-                                    e.preventDefault();
-                                    $('#cameraContainer').show();
-                                    $('#previewContainer').hide();
-                                    $(this).hide();
-                                    $('#next_step').hide();  // Hide the next step button
-                                    $('#error_finger_prints').text('');
-                                    $('#progressbar li:nth-child(2) .check-icon').addClass('d-none');
-                                });
-
-                                $(document).ready(function () {
-                                    console.log('Document ready');
-
-                                    $('#next_step').on('click', function (e) {
-                                        e.preventDefault();
-                                        console.log('Next step clicked');
-                                        localStorage.setItem('step4Completed', 'true');
-                                        showPopup();
-                                    });
-
-                                    function showPopup() {
-                                        console.log('Showing popup');
-                                        $('#popupOverlay').show();
-                                    }
-
-                                    $('#popupClose').on('click', function () {
-                                        console.log('Close button clicked');
-                                        $('#popupOverlay').hide();
-                                        window.location.href = 'step1.html';
-                                    });
-
-                                    // For testing, let's also allow closing the popup by clicking anywhere on the overlay
-                                    $('#popupOverlay').on('click', function (e) {
-                                        if (e.target === this) {
-                                            console.log('Overlay clicked');
-                                            $(this).hide();
-                                            window.location.href = 'step1.html';
-                                        }
-                                    });
-
-                                    console.log('Event listeners set up');
-                                });
-                            </script>
-                        </div>
+    <div
+      class="container d-flex align-items-center"
+      style="min-height: 100vh"
+      id=""
+    >
+      <div class="row justify-content-center mt-0">
+        <div
+          class="col-12 col-sm-9 col-md-7 col-lg-6 text-center p-2 p-md-0 mt-0 mb-0"
+        >
+          <div class="card px-0 pt-4 pb-0 mt-3 mb-3">
+            <div class="row">
+              <div class="col-md-12 mx-0">
+                <form id="msform">
+                  <ul id="progressbar">
+                    <li class="active relative" id="document">
+                      <strong>ID Card Front</strong>
+                      <div class="check-icon d-none">
+                        <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                      </div>
+                    </li>
+                    <li id="document">
+                      <strong>ID Card Back</strong>
+                      <div class="check-icon d-none">
+                        <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                      </div>
+                    </li>
+                    <li id="selfie">
+                      <strong>Selfie</strong>
+                      <div class="check-icon d-none selfie-icon">
+                        <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                      </div>
+                    </li>
+                    <li class="active relative" id="confirm">
+                      <strong>Fingerprint</strong>
+                      <div class="check-icon d-none">
+                        <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                      </div>
+                    </li>
+                  </ul>
+                  <div
+                    class="row justify-content-center"
+                    style="margin-bottom: 16px"
+                  >
+                    <div class="col-12 text-center">
+                      <p style="opacity: 0.7; margin-bottom: unset">
+                        Step 4 of 4
+                      </p>
                     </div>
-                </div>
+                  </div>
+                  <fieldset>
+                    <div class="form-card">
+                      <h2
+                        class="barlow-bold text-left"
+                        style="
+                          font-size: 20px;
+                          line-height: 30px;
+                          font-weight: 600;
+                          color: #1c2022;
+                        "
+                      >
+                        Upload Your Fingerprint
+                      </h2>
+                      <p class="pg-text">
+                        Please line your fingers with the image and then take a
+                        photo.
+                      </p>
+                      <div id="cameraContainer">
+                        <video id="videoFeed" autoplay playsinline></video>
+                        <canvas id="overlayCanvas"></canvas>
+                        <button
+                          id="captureButton"
+                          class="btn btn-primary btn-sm"
+                        >
+                          Capture Image
+                        </button>
+                      </div>
+                      <div class="previewContainer" id="previewContainer"></div>
+                      <span
+                        class="error"
+                        style="color: red"
+                        id="error_finger_prints"
+                      ></span>
+                      <div class="retake_btn">
+                        <button
+                          class="btn btn-danger btn-sm mt-2"
+                          style="display: none"
+                          id="retakebutton"
+                        >
+                          Retake
+                        </button>
+                        <button
+                          class="btn btn-primary btn-sm mt-2"
+                          style="display: none"
+                          id="next_step"
+                        >
+                          Next Step
+                        </button>
+                      </div>
+                    </div>
+                  </fieldset>
+                </form>
+
+                <script>
+                  const video = document.getElementById("videoFeed");
+                  const previewContainer =
+                    document.getElementById("previewContainer");
+                  const overlayCanvas =
+                    document.getElementById("overlayCanvas");
+                  const captureButton =
+                    document.getElementById("captureButton");
+                  const retakeButton = document.getElementById("retakebutton");
+                  const nextStepButton = document.getElementById("next_step");
+                  const overlayCtx = overlayCanvas.getContext("2d");
+
+                  let handImage = new Image();
+                  handImage.src = "palm-3241101.png";
+
+                  function drawFingerGuides() {
+                    const frameWidth = video.videoWidth || 300;
+                    const frameHeight = video.videoHeight || 400;
+
+                    overlayCanvas.width = frameWidth;
+                    overlayCanvas.height = frameHeight;
+                    overlayCtx.clearRect(
+                      0,
+                      0,
+                      overlayCanvas.width,
+                      overlayCanvas.height
+                    );
+
+                    if (handImage.complete) {
+                      drawHandImage();
+                    } else {
+                      handImage.onload = drawHandImage;
+                    }
+                  }
+
+                  function drawHandImage() {
+                    const frameWidth = overlayCanvas.width;
+                    const frameHeight = overlayCanvas.height;
+                    const aspectRatio = handImage.width / handImage.height;
+                    let imgWidth, imgHeight;
+
+                    // Adjust the size multiplier as needed
+                    imgHeight = frameHeight * 0.9; // Increased to use more of the vertical space
+                    imgWidth = imgHeight * aspectRatio;
+
+                    // If the image is too wide, scale it down
+                    if (imgWidth > frameWidth * 0.9) {
+                      imgWidth = frameWidth * 0.9;
+                      imgHeight = imgWidth / aspectRatio;
+                    }
+
+                    const xPosition = (frameWidth - imgWidth) / 2;
+                    const yPosition = (frameHeight - imgHeight) / 2;
+
+                    overlayCtx.drawImage(
+                      handImage,
+                      xPosition,
+                      yPosition,
+                      imgWidth,
+                      imgHeight
+                    );
+
+                    // Add text instruction
+                    overlayCtx.fillStyle = "#CCFF00";
+                    overlayCtx.font = "bold 18px Barlow";
+                    overlayCtx.textAlign = "center";
+                  }
+
+                  function initializeCamera(facingMode) {
+                    const constraints = {
+                      video: {
+                        facingMode: facingMode,
+                        width: { ideal: 300 },
+                        height: { ideal: 400 },
+                      },
+                    };
+
+                    navigator.mediaDevices
+                      .getUserMedia(constraints)
+                      .then((stream) => {
+                        video.srcObject = stream;
+                        video.onloadedmetadata = () => {
+                          video.play();
+                          drawFingerGuides();
+                        };
+                      })
+                      .catch((err) => {
+                        console.error(
+                          "Error accessing camera with ideal constraints:",
+                          err
+                        );
+                        // If ideal constraints fail, try with no specific resolution
+                        navigator.mediaDevices
+                          .getUserMedia({ video: { facingMode: facingMode } })
+                          .then((stream) => {
+                            video.srcObject = stream;
+                            video.onloadedmetadata = () => {
+                              video.play();
+                              drawFingerGuides();
+                            };
+                          })
+                          .catch((err) => {
+                            console.error(
+                              "Error accessing camera with fallback constraints:",
+                              err
+                            );
+                          });
+                      });
+                  }
+
+                  // Add event listener for orientation change
+                  window.addEventListener("orientationchange", () => {
+                    setTimeout(drawFingerGuides, 100); // Redraw guides after orientation change
+                  });
+
+                  // Initialize camera when the page loads
+                  initializeCamera("environment"); // 'environment' for back camera
+
+                  // Capture image when the button is clicked
+                  captureButton.addEventListener("click", () => {
+                    captureImage();
+                    // Perform image capture logic here
+                  });
+                  var captured_image;
+
+                  function captureImage() {
+                    $("#cameraContainer").hide();
+                    const canvas = document.createElement("canvas"); // Create a temporary canvas
+                    canvas.width = video.videoWidth; // Set canvas width to video width
+                    canvas.height = video.videoHeight; // Set canvas height to video height
+                    const ctx = canvas.getContext("2d");
+
+                    // Draw the video frame onto the canvas
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                    const imageDataURL = canvas.toDataURL(); // Get image data as base64 URL
+                    const img = new Image();
+                    img.src = imageDataURL;
+                    captured_image = imageDataURL;
+                    // Display captured image preview
+                    previewContainer.innerHTML = "";
+                    previewContainer.appendChild(img);
+                    $("#previewContainer").show();
+                    $("#retakebutton").show();
+                    $("#next_step").show();
+
+                    // Show the check icon for ID Card Back
+                    $("#progressbar li:nth-child(2) .check-icon").removeClass(
+                      "d-none"
+                    );
+                  }
+                  $("#msform").on("submit", function (e) {
+                    e.preventDefault();
+                  });
+                  $("#retakebutton").on("click", function (e) {
+                    e.preventDefault();
+                    $("#cameraContainer").show();
+                    $("#previewContainer").hide();
+                    $(this).hide();
+                    $("#next_step").hide(); // Hide the next step button
+                    $("#error_finger_prints").text("");
+                    $("#progressbar li:nth-child(2) .check-icon").addClass(
+                      "d-none"
+                    );
+                  });
+
+                  $(document).ready(function () {
+                    $("#next_step").on("click", function (e) {
+                      e.preventDefault();
+                      console.log("Next step clicked");
+                      localStorage.setItem("step4Completed", "true");
+                      showPopup();
+                    });
+
+                    function showPopup() {
+                      $("#popupOverlay").show();
+                    }
+
+                    $("#popupClose").on("click", function () {
+                      console.log("Close button clicked");
+                      $("#popupOverlay").hide();
+                      window.location.href = "step1.html";
+                    });
+
+                    $("#popupOverlay").on("click", function (e) {
+                      if (e.target === this) {
+                        console.log("Overlay clicked");
+                        $(this).hide();
+                        window.location.href = "step1.html";
+                      }
+                    });
+                  });
+                </script>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
 
     <div class="popup-overlay" id="popupOverlay">
-        <div class="popup">
-            <span class="popup-close" id="popupClose">&times;</span>
-            <div class="popup-content">
-                <div class="popup-icon">
-                    <img style="width: 150px;" src="finish-tick.gif" alt="">
-                </div>
-                <p>Your data has been successfully submitted!</p>
-            </div>
+      <div class="popup">
+        <span class="popup-close" id="popupClose">&times;</span>
+        <div class="popup-content">
+          <div class="popup-icon">
+            <img style="width: 150px" src="finish-tick.gif" alt="" />
+          </div>
+          <p>Your data has been successfully submitted!</p>
         </div>
+      </div>
     </div>
 
-
     <script>
-        $(document).ready(function () {
-            $(".submit").click(function () {
-                return false;
-            })
-            hideLoader();
+      $(document).ready(function () {
+        $(".submit").click(function () {
+          return false;
         });
+        hideLoader();
+      });
 
-        function hideLoader() {
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('msform').style.display = 'block';
-        }
+      function hideLoader() {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("msform").style.display = "block";
+      }
 
-        function showLoader() {
-            document.getElementById('loader').style.display = 'flex';
-            document.getElementById('msform').style.display = 'none';
-        }
+      function showLoader() {
+        document.getElementById("loader").style.display = "flex";
+        document.getElementById("msform").style.display = "none";
+      }
     </script>
 
     <script>
-        $(document).ready(function () {
-            // Check if step 1 was completed
-            if (localStorage.getItem('step1Completed') === 'true') {
-                // Keep ID Card Front active and checked
-                $('#progressbar li:first-child').addClass('active');
-                $('#progressbar li:first-child .check-icon').removeClass('d-none');
-            }
+      $(document).ready(function () {
+        // Check if step 1 was completed
+        if (localStorage.getItem("step1Completed") === "true") {
+          // Keep ID Card Front active and checked
+          $("#progressbar li:first-child").addClass("active");
+          $("#progressbar li:first-child .check-icon").removeClass("d-none");
+        }
 
-            // Check if step 2 was completed
-            if (localStorage.getItem('step2Completed') === 'true') {
-                // Keep ID Card Back active and checked
-                $('#progressbar li:nth-child(2)').addClass('active');
-                $('#progressbar li:nth-child(2) .check-icon').removeClass('d-none');
-            }
+        // Check if step 2 was completed
+        if (localStorage.getItem("step2Completed") === "true") {
+          // Keep ID Card Back active and checked
+          $("#progressbar li:nth-child(2)").addClass("active");
+          $("#progressbar li:nth-child(2) .check-icon").removeClass("d-none");
+        }
 
-            // Check if step 3 was completed
-            if (localStorage.getItem('step3Completed') === 'true') {
-                // Keep Selfie active and checked
-                $('#progressbar li:nth-child(3)').addClass('active');
-                $('#progressbar li:nth-child(3) .check-icon').removeClass('d-none');
-            }
+        // Check if step 3 was completed
+        if (localStorage.getItem("step3Completed") === "true") {
+          // Keep Selfie active and checked
+          $("#progressbar li:nth-child(3)").addClass("active");
+          $("#progressbar li:nth-child(3) .check-icon").removeClass("d-none");
+        }
 
-            // Make Fingerprint active
-            $('#progressbar li:nth-child(4)').addClass('active');
-        });
+        // Make Fingerprint active
+        $("#progressbar li:nth-child(4)").addClass("active");
+      });
     </script>
-</body>
+  </body>
+</html>
