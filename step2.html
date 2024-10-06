@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -129,47 +130,41 @@
 
                                 // Function to draw a box border on the overlay canvas
                                 function drawBox() {
-                                    const frameWidth = video.videoWidth || 200;
-                                    const frameHeight = video.videoHeight || 150;
+                                    const frameWidth =
+                                        video.videoWidth || 200; // Use video width if available, else fallback to 300
+                                    const frameHeight =
+                                        video.videoHeight || 150; // Use video height if available, else fallback to 200
+                                    const boxWidth = frameWidth * 0.8; // 80% of frame width
+                                    const boxHeight = frameHeight * 0.8; // 80% of frame height
+                                    const borderRadius = 2; // Border radius
+                                    const boxX = (frameWidth - boxWidth) / 2; // Calculate X position of the box
+                                    const boxY =
+                                        (frameHeight - boxHeight) / 2; // Calculate Y position of the box
 
                                     // Set the size of the overlay canvas
                                     overlayCanvas.width = frameWidth;
                                     overlayCanvas.height = frameHeight;
 
                                     // Clear the overlay canvas
-                                    overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+                                    overlayCtx.clearRect(
+                                        0,
+                                        0,
+                                        overlayCanvas.width,
+                                        overlayCanvas.height
+                                    );
 
-                                    const idCardImage = new Image();
-                                    idCardImage.src = 'id-card-back.png'; //Image which is displayed on the canvas
-
-                                    idCardImage.onload = function () {
-                                        // Set the global alpha (opacity)
-                                        overlayCtx.globalAlpha = 0.3;
-                                        const scale = Math.min(frameWidth / idCardImage.height, frameHeight / idCardImage.width);
-                                        const newWidth = idCardImage.height * scale;
-                                        const newHeight = idCardImage.width * scale;
-
-                                        const x = (frameWidth - newWidth) / 2;
-                                        const y = (frameHeight - newHeight) / 2;
-
-                                        // Save the current context state
-                                        overlayCtx.save();
-
-                                        // Translate to the center of where we want to draw the image
-                                        overlayCtx.translate(x + newWidth / 2, y + newHeight / 2);
-
-                                        // Rotate the context 90 degrees clockwise
-                                        overlayCtx.rotate(Math.PI / 2);
-
-                                        // Draw the image
-                                        overlayCtx.drawImage(idCardImage, -newHeight / 2, -newWidth / 2, newHeight, newWidth);
-
-                                        // Restore the context state
-                                        overlayCtx.restore();
-
-                                        // Reset the global alpha for future drawings
-                                        overlayCtx.globalAlpha = 1.0;
-                                    };
+                                    // Draw the rounded box on the overlay canvas
+                                    overlayCtx.strokeStyle = "#CCFF00";
+                                    overlayCtx.lineWidth = 4;
+                                    // Function to draw rounded rectangle
+                                    drawRoundedRect(
+                                        overlayCtx,
+                                        boxX,
+                                        boxY,
+                                        boxWidth,
+                                        boxHeight,
+                                        borderRadius
+                                    );
                                 }
 
                                 function drawRoundedRect(
