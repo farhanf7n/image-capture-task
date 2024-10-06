@@ -336,7 +336,7 @@
 
                                   // When the image loads, draw it on the canvas
                                   idCardImage.onload = function () {
-                                    overlayCtx.globalAlpha = 1; // Adjust the opacity as needed(0.3)
+                                    overlayCtx.globalAlpha = 1.0;
                                     const scale = Math.min(
                                       frameWidth / idCardImage.height,
                                       frameHeight / idCardImage.width
