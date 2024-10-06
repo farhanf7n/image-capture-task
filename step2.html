@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -25,7 +24,6 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet" />
-
     <meta name="csrf-token" content="" />
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -35,7 +33,7 @@
 <body>
     <div id="loader">
         <div class="spinner"></div>
-        <p>Loading..</p>
+        <p>Loading...</p>
     </div>
     <!-- MultiStep Form -->
     <div class="container d-flex align-items-center" style="min-height: 100vh" id="">
@@ -141,22 +139,16 @@
                                     // Clear the overlay canvas
                                     overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
-                                    // Create an Image object
                                     const idCardImage = new Image();
-                                    idCardImage.src = 'id-card-back.png'; // Make sure this path is correct
+                                    idCardImage.src = 'id-card-back.png'; //Image which is displayed on the canvas
 
-                                    // When the image loads, draw it on the canvas
                                     idCardImage.onload = function () {
                                         // Set the global alpha (opacity)
                                         overlayCtx.globalAlpha = 0.3;
-
-                                        // Calculate the size to maintain aspect ratio and fit within the frame
-                                        // Note: We swap width and height here because we're rotating the image
                                         const scale = Math.min(frameWidth / idCardImage.height, frameHeight / idCardImage.width);
                                         const newWidth = idCardImage.height * scale;
                                         const newHeight = idCardImage.width * scale;
 
-                                        // Calculate position to center the image
                                         const x = (frameWidth - newWidth) / 2;
                                         const y = (frameHeight - newHeight) / 2;
 
@@ -220,16 +212,13 @@
                                     ctx.stroke();
                                 }
 
-                                // Call drawBox initially to show the box
                                 drawBox();
 
-                                // Add this line to redraw the box when the video dimensions are known
                                 video.addEventListener(
                                     "loadedmetadata",
                                     drawBox
                                 );
 
-                                // Add this function at the beginning of your script
                                 function initializeCameraOnLoad() {
                                     if (document.readyState === "complete") {
                                         initializeCamera();
@@ -250,25 +239,19 @@
                                         });
                                         video.srcObject = stream;
                                         await video.play();
-                                        drawBox(); // Call drawBox after the video starts playing
+                                        drawBox();
                                     } catch (error) {
                                         console.error("Error accessing camera:", error);
-                                        // Handle the error (e.g., show a message to the user)
                                     }
                                 }
 
-                                // Store the current stream
                                 let currentStream;
-
-                                // Initialize camera and store the stream
                                 initializeCameraOnLoad();
 
-                                // Capture image when the button is clicked
                                 captureButton.addEventListener(
                                     "click",
                                     () => {
                                         captureImage();
-                                        // Perform image capture logic here
                                     }
                                 );
                                 var captured_image;
@@ -280,8 +263,7 @@
                                         document.createElement("canvas");
                                     const ctx = canvas.getContext("2d");
 
-                                    // Set canvas size to a smaller, fixed size
-                                    const targetWidth = 1280; // Adjust this value as needed
+                                    const targetWidth = 1280;
                                     const targetHeight =
                                         (video.videoHeight / video.videoWidth) *
                                         targetWidth;
@@ -337,7 +319,7 @@
                                         ctx.putImageData(imageData, 0, 0);
                                     }
 
-                                    // Apply a subtle sharpening filter (optional, remove if it's too slow)
+                                    // Apply a subtle sharpening filter (Removing this improves performance
                                     applySharpening(
                                         ctx,
                                         targetWidth,
@@ -372,7 +354,7 @@
                                 $("#msform").on("submit", function (e) {
                                     e.preventDefault();
                                 });
-                                // Modify the retake button click handler
+
                                 $("#retakebutton").on("click", function (e) {
                                     e.preventDefault();
                                     $("#cameraContainer").show();
@@ -382,7 +364,6 @@
                                     $("#error_cnic_document").text("");
                                     $('#progressbar li:nth-child(2) .check-icon').addClass('d-none');
 
-                                    // Stop the current stream if it exists
                                     if (currentStream) {
                                         currentStream.getTracks().forEach(track => track.stop());
                                     }
@@ -399,78 +380,6 @@
                                     localStorage.setItem('step2Completed', 'true');
                                     // Redirect to step3.html
                                     window.location.href = "step3.html";
-                                });
-
-                                $.validator.addMethod(
-                                    "customDate",
-                                    function (value, element) {
-                                        // Check if the value matches the "d-m-Y" format using a regular expression
-                                        return /^(0?[1-9]|[12][0-9]|3[01])-(0?[1-9]|1[012])-\d{4}$/.test(
-                                            value
-                                        );
-                                    },
-                                    "Please enter a valid date (dd-mm-yyyy)"
-                                );
-                                $("#saveDocumentForm").validate({
-                                    rules: {
-                                        identity_name: {
-                                            required: true,
-                                        },
-                                        father_name: {
-                                            required: true,
-                                        },
-                                        identity_number: {
-                                            required: true,
-                                            minlength: 13,
-                                            maxlength: 13,
-                                            number: true,
-                                        },
-                                        date_of_birth: {
-                                            required: true,
-                                            customDate: true,
-                                        },
-                                        card_issue_date: {
-                                            required: true,
-                                            customDate: true,
-                                        },
-                                        card_expiry_date: {
-                                            required: true,
-                                            customDate: true,
-                                        },
-                                    },
-                                    messages: {
-                                        date_of_birth: {
-                                            dateISO:
-                                                "Enter a valid date in format (1998-10-04).",
-                                        },
-                                        card_issue_date: {
-                                            dateISO:
-                                                "Enter a valid date in format (1998-10-04).",
-                                        },
-                                        card_expiry_date: {
-                                            dateISO:
-                                                "Enter a valid date in format (1998-10-04).",
-                                        },
-
-                                        identity_number: {
-                                            number:
-                                                "Put only numbers of your id card.",
-                                            minlength:
-                                                "The ID card number must be exactly 13 characters long.",
-                                            maxlength:
-                                                "The ID card number must be exactly 13 characters long.",
-                                        },
-                                    },
-                                    errorPlacement: function (
-                                        error,
-                                        element
-                                    ) {
-                                        error.insertAfter(element);
-                                        //   error.appendTo(element.parent());
-                                    },
-                                    submitHandler: function (form) {
-                                        form.submit();
-                                    },
                                 });
                             </script>
                         </div>
