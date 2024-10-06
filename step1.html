@@ -314,15 +314,9 @@
                                 // Function to draw a box border on the overlay canvas
                                 function drawBox() {
                                   const frameWidth =
-                                    video.videoWidth || 200; // Use video width if available, else fallback to 300
+                                    video.videoWidth || 200;
                                   const frameHeight =
-                                    video.videoHeight || 150; // Use video height if available, else fallback to 200
-                                  const boxWidth = frameWidth * 0.8; // 80% of frame width
-                                  const boxHeight = frameHeight * 0.8; // 80% of frame height
-                                  const borderRadius = 2; // Border radius
-                                  const boxX = (frameWidth - boxWidth) / 2; // Calculate X position of the box
-                                  const boxY =
-                                    (frameHeight - boxHeight) / 2; // Calculate Y position of the box
+                                    video.videoHeight || 150;
 
                                   // Set the size of the overlay canvas
                                   overlayCanvas.width = frameWidth;
@@ -336,58 +330,51 @@
                                     overlayCanvas.height
                                   );
 
-                                  // Draw the rounded box on the overlay canvas
-                                  overlayCtx.strokeStyle = "#CCFF00";
-                                  overlayCtx.lineWidth = 4;
-                                  // Function to draw rounded rectangle
-                                  drawRoundedRect(
-                                    overlayCtx,
-                                    boxX,
-                                    boxY,
-                                    boxWidth,
-                                    boxHeight,
-                                    borderRadius
-                                  );
-                                }
+                                  // Create an Image object
+                                  const idCardImage = new Image();
+                                  idCardImage.src = "id-card-front.png";
 
-                                function drawRoundedRect(
-                                  ctx,
-                                  x,
-                                  y,
-                                  width,
-                                  height,
-                                  radius
-                                ) {
-                                  ctx.beginPath();
-                                  ctx.moveTo(x + radius, y);
-                                  ctx.lineTo(x + width - radius, y);
-                                  ctx.quadraticCurveTo(
-                                    x + width,
-                                    y,
-                                    x + width,
-                                    y + radius
-                                  );
-                                  ctx.lineTo(
-                                    x + width,
-                                    y + height - radius
-                                  );
-                                  ctx.quadraticCurveTo(
-                                    x + width,
-                                    y + height,
-                                    x + width - radius,
-                                    y + height
-                                  );
-                                  ctx.lineTo(x + radius, y + height);
-                                  ctx.quadraticCurveTo(
-                                    x,
-                                    y + height,
-                                    x,
-                                    y + height - radius
-                                  );
-                                  ctx.lineTo(x, y + radius);
-                                  ctx.quadraticCurveTo(x, y, x + radius, y);
-                                  ctx.closePath();
-                                  ctx.stroke();
+                                  // When the image loads, draw it on the canvas
+                                  idCardImage.onload = function () {
+                                    overlayCtx.globalAlpha = 1; // Adjust the opacity as needed(0.3)
+                                    const scale = Math.min(
+                                      frameWidth / idCardImage.height,
+                                      frameHeight / idCardImage.width
+                                    );
+                                    const newWidth =
+                                      idCardImage.height * scale;
+                                    const newHeight =
+                                      idCardImage.width * scale;
+
+                                    // Calculate position to center the image
+                                    const x = (frameWidth - newWidth) / 2;
+                                    const y = (frameHeight - newHeight) / 2;
+
+                                    // Save the current context state
+                                    overlayCtx.save();
+
+                                    // Translate to the center of where we want to draw the image
+                                    overlayCtx.translate(
+                                      x + newWidth / 2,
+                                      y + newHeight / 2
+                                    );
+
+                                    // Rotate the context 90 degrees clockwise
+                                    overlayCtx.rotate(Math.PI / 2);
+
+                                    // Draw the image
+                                    overlayCtx.drawImage(
+                                      idCardImage,
+                                      -newHeight / 2,
+                                      -newWidth / 2,
+                                      newHeight,
+                                      newWidth
+                                    );
+
+                                    // Restore the context state
+                                    overlayCtx.restore();
+                                    overlayCtx.globalAlpha = 1.0;
+                                  };
                                 }
 
                                 // Call drawBox initially to show the box
