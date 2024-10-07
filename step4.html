@@ -32,6 +32,42 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 
   <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .card {
+      max-width: 500px;
+      margin: auto;
+    }
+
+    #msform {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-card {
+      flex-grow: 1;
+      overflow-y: auto;
+    }
+
+    #cameraContainer {
+      max-height: 60vh;
+      overflow: hidden;
+    }
+
+    #videoFeed {
+      width: 100%;
+      height: auto;
+      max-height: 60vh;
+      object-fit: cover;
+    }
+
     .popup-overlay {
       display: none;
       position: fixed;
@@ -84,7 +120,6 @@
       width: 100%;
       max-width: 500px;
       margin: 0 auto;
-      /* overflow: hidden; */
     }
 
     #videoFeed {
@@ -118,10 +153,10 @@
     <p>Loading...</p>
   </div>
   <!-- MultiStep Form -->
-  <div class="container d-flex align-items-center" id="" style="min-height: 100vh">
-    <div class="row justify-content-center">
-      <div class="col-12 col-sm-9 col-md-7 col-lg-12 text-center p-2 p-md-0 mt-0 mb-0">
-        <div class="card">
+  <div class="container-fluid d-flex align-items-center justify-content-center vh-100 p-0">
+    <div class="row justify-content-center m-auto">
+      <div class="col-12 col-sm-9 col-md-7 col-lg-6 text-center p-2 p-md-0 mt-0 mb-0">
+        <div class="card w-100">
           <div class="row">
             <div class="col-md-12 mx-0">
               <form id="msform">
