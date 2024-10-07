@@ -997,13 +997,12 @@ select.list-dt:focus {
 
 #counter {
   position: absolute;
-  top: 260px;
+  top: 280px;
   left: 50%;
   transform: translateX(-50%);
   font-size: 2em;
   color: white;
   z-index: 2;
-  font-weight: 500;
 }
 
 #instruction {
