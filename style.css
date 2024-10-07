@@ -1010,7 +1010,7 @@ select.list-dt:focus {
   top: 78%;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 0.8em;
+  font-size: 0.9em;
   color: white;
   z-index: 2;
   display: none;
