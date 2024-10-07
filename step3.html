@@ -59,6 +59,35 @@
             transform: rotate(-90deg);
             transform-origin: 50% 50%;
         }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-height: 90vh;
+            /* Limit maximum height */
+            overflow-y: auto;
+            /* Add scrollbar if content exceeds max-height */
+        }
     </style>
 
     <meta name="csrf-token" content="">
@@ -71,6 +100,24 @@
     <div id="loader">
         <div class="spinner"></div>
         <p>Loading...</p>
+    </div>
+
+    <!-- instruction Modal -->
+    <div id="instructionModal" class="modal">
+        <div class="modal-content">
+            <h2 class="barlow-bold mb-2">Instructions!</h2>
+            <p style="margin-bottom: 0.5rem; text-align: left">
+                Before taking the selfie, please follow these instructions:
+            </p>
+            <ul style="padding: 0px 20px; text-align: left">
+                <li>Ensure you have good lighting.</li>
+                <li>Clear your camera of any obstructions.</li>
+                <li>
+                    Sit straight while taking a selfie.
+                </li>
+            </ul>
+            <button id="continueBtn" class="btn btn-primary">Continue</button>
+        </div>
     </div>
     <!-- MultiStep Form -->
     <div class="container d-flex align-items-center" style="min-height: 100vh" id="">
@@ -138,16 +185,34 @@
                                         Step</a>
                                 </fieldset>
                                 <script>
+                                    // Instruction Modal
+                                    document.addEventListener(
+                                        "DOMContentLoaded",
+                                        function () {
+                                            console.log("Is it working???")
+                                            var modal =
+                                                document.getElementById(
+                                                    "instructionModal"
+                                                );
+                                            var continueBtn =
+                                                document.getElementById(
+                                                    "continueBtn"
+                                                );
+
+                                            // Show the modal when the page loads
+                                            modal.style.display = "flex";
+
+                                            // Hide the modal and start the camera when the Continue button is clicked
+                                            continueBtn.onclick = function () {
+                                                modal.style.display = "none";
+                                                main().then(() => {
+                                                    startCountdownAndRecording();
+                                                });
+                                            };
+                                        }
+                                    );
                                     let mediaRecorder;
                                     var videoData;
-                                    function initializeCameraOnLoad() {
-                                        if (document.readyState === "complete") {
-                                            main();
-                                        } else {
-                                            window.addEventListener('load', main);
-                                        }
-                                    }
-
                                     async function main() {
                                         const videoLive = document.getElementById('videoLive');
                                         const counter = document.getElementById('counter');
@@ -188,52 +253,7 @@
                                                 });
                                             }
 
-                                            countdownInterval = setInterval(() => {
-                                                countdownSeconds--;
-                                                if (countdownSeconds >= 0) {
-                                                    counter.textContent = countdownSeconds;
-                                                } else {
-                                                    counter.textContent = '';
-                                                    document.getElementById('circular-progress').style.display = 'block'; // Show the progress indicator
-                                                    startRecording();
-                                                    recordingStartTime = Date.now();
-                                                    instruction.style.display = 'block';
-
-                                                    // Start updating the progress bar
-                                                    const progressInterval = setInterval(() => {
-                                                        updateProgressBar(recordingStartTime, recordingDuration);
-                                                    }, 100); // Update every 100ms for smoother animation
-
-                                                    setTimeout(() => {
-                                                        instruction.textContent = 'Look Straight in Circle';
-                                                        leftArrow.style.display = 'none';
-                                                        rightArrow.style.display = 'none';
-                                                    }, 1000); // Display "Straight" instruction after 1 second
-
-                                                    setTimeout(() => {
-                                                        instruction.textContent = 'Move your face to the left';
-                                                        leftArrow.style.display = 'block';
-                                                    }, 2000); // Display "Move your face to the left" instruction after 2 seconds
-
-                                                    setTimeout(() => {
-                                                        instruction.textContent = 'Move your face to the right';
-                                                        leftArrow.style.display = 'none';
-                                                        rightArrow.style.display = 'block';
-                                                    }, 4000); // Display "Move your face to the right" instruction after 4 seconds
-
-                                                    setTimeout(() => {
-                                                        instruction.textContent = '';
-                                                        leftArrow.style.display = 'none';
-                                                        rightArrow.style.display = 'none';
-                                                        document.getElementById('circular-progress').style.display = 'none'; // Hide the progress indicator
-                                                        stopRecording();
-                                                        clearInterval(progressInterval); // Stop updating progress bar
-                                                    }, recordingDuration * 1000);
-
-                                                    clearInterval(countdownInterval);
-                                                }
-                                            }, 1000); // Countdown interval every 1 second
-
+                                            // The countdown and recording logic will be moved to a separate function
 
                                             mediaRecorder.addEventListener('dataavailable', event => {
                                                 videoRecorded.src = URL.createObjectURL(event.data)
@@ -278,8 +298,6 @@
                                         }
                                     }
 
-                                    initializeCameraOnLoad();
-
                                     // Modify the retake button click handler
                                     $("#retakeBtn").on("click", function (e) {
                                         e.preventDefault();
@@ -303,6 +321,62 @@
 
                                         const offset = circumference - progress * circumference;
                                         circle.style.strokeDashoffset = offset;
+                                    }
+
+                                    function startCountdownAndRecording() {
+                                        const videoLive = document.getElementById('videoLive');
+                                        const counter = document.getElementById('counter');
+                                        const instruction = document.getElementById('instruction');
+                                        const leftArrow = document.querySelector('.left-arrow');
+                                        const rightArrow = document.querySelector('.right-arrow');
+                                        let countdownInterval;
+                                        let countdownSeconds = 4;
+                                        const recordingDuration = 6;
+
+                                        countdownInterval = setInterval(() => {
+                                            countdownSeconds--;
+                                            if (countdownSeconds >= 0) {
+                                                counter.textContent = countdownSeconds;
+                                            } else {
+                                                counter.textContent = '';
+                                                document.getElementById('circular-progress').style.display = 'block';
+                                                startRecording();
+                                                recordingStartTime = Date.now();
+                                                instruction.style.display = 'block';
+
+                                                const progressInterval = setInterval(() => {
+                                                    updateProgressBar(recordingStartTime, recordingDuration);
+                                                }, 100);
+
+                                                setTimeout(() => {
+                                                    instruction.textContent = 'Look Straight in Circle';
+                                                    leftArrow.style.display = 'none';
+                                                    rightArrow.style.display = 'none';
+                                                }, 1000);
+
+                                                setTimeout(() => {
+                                                    instruction.textContent = 'Move your face to the left';
+                                                    leftArrow.style.display = 'block';
+                                                }, 2000);
+
+                                                setTimeout(() => {
+                                                    instruction.textContent = 'Move your face to the right';
+                                                    leftArrow.style.display = 'none';
+                                                    rightArrow.style.display = 'block';
+                                                }, 4000);
+
+                                                setTimeout(() => {
+                                                    instruction.textContent = '';
+                                                    leftArrow.style.display = 'none';
+                                                    rightArrow.style.display = 'none';
+                                                    document.getElementById('circular-progress').style.display = 'none';
+                                                    stopRecording();
+                                                    clearInterval(progressInterval);
+                                                }, recordingDuration * 1000);
+
+                                                clearInterval(countdownInterval);
+                                            }
+                                        }, 1000);
                                     }
                                 </script>
                         </div>
