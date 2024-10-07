@@ -1,3 +1,10 @@
+:root {
+  --yellow: #ffb555;
+  --green: #527a54;
+  --light-gray: #ddd;
+  --white: #ffffff;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -6,7 +13,7 @@
 }
 
 body {
-  background-color: #fafaf8 !important;
+  background-color: var(--white) !important;
 }
 
 .barlow-thin {
@@ -122,7 +129,7 @@ body {
 }
 
 #msform ul {
- display: flex;
+  display: flex;
   gap: 12px;
   align-items: center;
   justify-content: center;
@@ -133,10 +140,10 @@ body {
 }
 
 #msform fieldset .form-card {
-  background-color: #f0f0ed;
+  background-color: var(--white);
   border: 0 none;
-  border-radius: 10px;
-  border: 0.125rem dashed #e4e5e1;
+  border-radius: 8px;
+  border: 2px solid var(--green);
   padding: 20px 40px 40px 40px;
   box-sizing: border-box;
   width: 94%;
@@ -210,7 +217,7 @@ body {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -225,7 +232,7 @@ body {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 #instructionModal .modal-content {
@@ -233,7 +240,7 @@ body {
 }
 
 .modal-content {
- padding: 20px;
+  padding: 20px;
   text-align: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   height: 100%;
@@ -244,7 +251,7 @@ body {
 }
 
 #instructionModal .modal-content {
-    margin: 0px 10px;
+  margin: 0px 10px;
   background-color: #fefefe;
   padding: 20px;
   border: 1px solid #888;
@@ -318,8 +325,9 @@ select.list-dt:focus {
 /*The background card*/
 .card {
   padding: 30px 10px !important;
-  border-radius: 10px !important;
-  border: 0.125rem dashed #e4e5e1 !important;
+  border-radius: 8px !important;
+  border: 2px solid var(--light-gray) !important;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px !important;
 }
 
 /*FieldSet headings*/
@@ -346,7 +354,7 @@ select.list-dt:focus {
 }
 
 #progressbar .active {
-  color: #ff5e24;
+  color: var(--green);
 }
 
 /*Icons in the ProgressBar*/
@@ -655,7 +663,7 @@ select.list-dt:focus {
 
 #overlayCanvas {
   position: absolute;
- top: 6px !important;
+  top: 6px !important;
   left: 0;
   width: 100%;
   height: 86%;
@@ -1233,7 +1241,7 @@ select.list-dt:focus {
 #progressbar {
   margin-bottom: 16px;
   overflow: hidden;
-  color: rgb(0 0 0);
+  color: var(--light-gray);
   margin-top: -23px;
 }
 
@@ -1269,9 +1277,9 @@ select.list-dt:focus {
   line-height: 45px;
   display: block;
   font-size: 18px;
-  color: #ff5e24;
-  background-color: #fafaf8;
-  border: 1px solid #f0f0ed;
+  color: var(--green);
+  background-color: var(--white);
+  border: 1px solid var(--green);
   border-radius: 0.5rem;
   margin: 0 auto 10px auto;
   padding: 2px;
@@ -1298,9 +1306,9 @@ select.list-dt:focus {
 /*Color number of the step and the connector before it*/
 #progressbar li.active:before,
 #progressbar li.active:after {
-  background: #ff5e24;
-  color: white;
-  border: 1px solid #f0f0ed;
+  background: var(--green);
+  color: var(--white);
+  border: 1px solid var(--light-gray);
 }
 
 /*Imaged Radio Buttons*/
