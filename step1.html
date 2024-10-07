@@ -38,25 +38,6 @@
     <div class="spinner"></div>
     <p>Loading...</p>
   </div>
-  <!-- Welcome Modal -->
-  <div id="welcomeModal" class="modal">
-    <div class="modal-content">
-      <h2 class="barlow-bold mb-2">Welcome!</h2>
-      <p style="margin-bottom: 0.5rem; text-align: left">
-        Follow these standards, then begin the verification procedure.
-      </p>
-      <ul style="padding: 0px 20px; text-align: left">
-        <li>You must have good lighting.</li>
-        <li>Get your ID card.</li>
-        <li>Sit straight up when snapping a selfie.</li>
-        <li>
-          Before snapping a photo of your left hand, ensure that your hands
-          are clear.
-        </li>
-      </ul>
-      <button id="continueBtn" class="btn btn-primary">Continue</button>
-    </div>
-  </div>
   <!-- MultiStep Form -->
   <div class="container d-flex align-items-center" id="" style="min-height: 100vh">
     <div class="row justify-content-center">
@@ -219,28 +200,6 @@
                                 </fieldset>
                               </form>
                               <script>
-                                // Welcome Modal
-                                document.addEventListener(
-                                  "DOMContentLoaded",
-                                  function () {
-                                    var modal =
-                                      document.getElementById(
-                                        "welcomeModal"
-                                      );
-                                    var continueBtn =
-                                      document.getElementById(
-                                        "continueBtn"
-                                      );
-
-                                    // Show the modal when the page loads
-                                    modal.style.display = "flex";
-
-                                    // Hide the modal when the Continue button is clicked
-                                    continueBtn.onclick = function () {
-                                      modal.style.display = "none";
-                                    };
-                                  }
-                                );
                                 // Add this function at the beginning of your script
                                 function initializeCameraOnLoad() {
                                   if (document.readyState === "complete") {
