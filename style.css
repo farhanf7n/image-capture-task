@@ -383,7 +383,7 @@ select.list-dt:focus {
 #msform {
   text-align: center;
   position: relative;
-  margin-top: 20px;
+  /* margin-top: 20px; */
 }
 
 .previewContainer img {
