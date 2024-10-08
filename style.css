@@ -524,20 +524,6 @@ select.list-dt:focus {
   content: "\f00c";
 }
 
-/*ProgressBar before any progress*/
-#progressbar li:before {
-  width: 50px;
-  height: 50px;
-  line-height: 45px;
-  display: block;
-  font-size: 18px;
-  color: #ffffff;
-  background: lightgray;
-  border-radius: 50%;
-  margin: 0 auto 10px auto;
-  padding: 2px;
-}
-
 /*ProgressBar connectors*/
 #progressbar li:after {
   content: "";
@@ -813,19 +799,6 @@ select.list-dt:focus {
   content: "\f00c";
 }
 
-/*ProgressBar before any progress*/
-#progressbar li:before {
-  width: 50px;
-  height: 50px;
-  line-height: 45px;
-  display: block;
-  font-size: 18px;
-  color: #ffffff;
-  background: lightgray;
-  border-radius: 50%;
-  margin: 0 auto 10px auto;
-  padding: 2px;
-}
 
 /*ProgressBar connectors*/
 #progressbar li:after {
