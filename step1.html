@@ -1,522 +1,584 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Step - 1</title>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Step - 1</title>
+    <!-- Favicon   -->
+    <link rel="icon" type="image/png" href="shield-check.png" />
 
-  <!-- Favicon   -->
-  <link rel="icon" type="image/png" href="shield-check.png" />
+    <!-- Google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
 
-  <!-- Google fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-    rel="stylesheet" />
+    <!-- Custom css -->
+    <link rel="stylesheet" href="style.css" />
 
-  <!-- Custom css -->
-  <link rel="stylesheet" href="style.css" />
+    <!-- Bootstrap css  -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
 
-  <!-- Bootstrap css  -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+    <!-- Font awesome css  -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css"
+    />
 
-  <!-- Font awesome css  -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css" />
+    <meta name="csrf-token" content="" />
 
-  <meta name="csrf-token" content="" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('assets/js/jquery.validate.min.js') }}"></script>
+    <style>
+      #msform {
+        display: flex !important;
+        height: 100%;
+        flex-direction: column;
+        justify-content: center;
+      }
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-  <script src="{{ asset('assets/js/jquery.validate.min.js') }}"></script>
-  <style>
-    #msform {
-      display: flex !important;
-      height: 100%;
-      flex-direction: column;
-      justify-content: center;
-    }
+      .row {
+        height: 100%;
+      }
 
-    .row {
-      height: 100%;
-    }
+      .card {
+        height: 100%;
+      }
 
-    .card {
-      height: 100%;
-    }
+      .container {
+        display: flex;
+        align-items: center;
+        height: 100%;
+      }
+    </style>
+  </head>
 
-    .container {
-      display: flex;
-      align-items: center;
-      height: 100vh;
-    }
-  </style>
-</head>
+  <body style="height: 100vh">
+    <div id="loader">
+      <div class="spinner"></div>
+      <p>Loading...</p>
+    </div>
+    <!-- MultiStep Form -->
+    <div class="container" id="">
+      <div class="row justify-content-center">
+        <div
+          class="col-12 col-sm-9 col-md-7 col-lg-12 text-center p-2 p-md-0 mt-0 mb-0"
+        >
+          <div class="card">
+            <div class="row">
+              <div class="col-md-12 mx-0">
+                <form id="msform">
+                  <ul id="progressbar">
+                    <li class="active relative" id="document">
+                      <strong>ID Card Front</strong>
+                      <div class="check-icon d-none">
+                        <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                      </div>
+                    </li>
+                    <li id="document">
+                      <strong>ID Card Back</strong>
+                      <div class="check-icon d-none">
+                        <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                      </div>
+                    </li>
+                    <li id="selfie">
+                      <strong>Selfie</strong>
+                      <div class="check-icon d-none">
+                        <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                      </div>
+                    </li>
 
-<body style="height: 100vh;">
-  <div id="loader">
-    <div class="spinner"></div>
-    <p>Loading...</p>
-  </div>
-  <!-- MultiStep Form -->
-  <div class="container" id="">
-    <div class="row justify-content-center">
-      <div class="col-12 col-sm-9 col-md-7 col-lg-12 text-center p-2 p-md-0 mt-0 mb-0">
-        <div class="card">
-          <div class="row">
-            <div class="col-md-12 mx-0">
-              <form id="msform">
-                <ul id="progressbar">
-                  <li class="active relative" id="document">
-                    <strong>ID Card Front</strong>
-                    <div class="check-icon d-none">
-                      <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                    </div>
-                  </li>
-                  <li id="document">
-                    <strong>ID Card Back</strong>
-                    <div class="check-icon d-none">
-                      <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                    </div>
-                  </li>
-                  <li id="selfie">
-                    <strong>Selfie</strong>
-                    <div class="check-icon d-none">
-                      <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                    </div>
-                  </li>
-
-                  <li id="confirm">
-                    <strong>Fingerprint</strong>
-                    <div class="check-icon d-none">
-                      <i class="fa fa-check-square-o" aria-hidden="true"></i>
-                    </div>
-                  </li>
-                </ul>
-                <p style="opacity: 0.7; margin-bottom: 12px">
-                  Step 1 of 4
-                </p>
-                <fieldset>
-                  <div class="form-card">
-                    <h2 class="barlow-bold text-left" style="
+                    <li id="confirm">
+                      <strong>Fingerprint</strong>
+                      <div class="check-icon d-none">
+                        <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                      </div>
+                    </li>
+                  </ul>
+                  <p style="opacity: 0.7; margin-bottom: 12px">Step 1 of 4</p>
+                  <fieldset>
+                    <div class="form-card">
+                      <h2
+                        class="barlow-bold text-left"
+                        style="
                           font-size: 20px;
                           line-height: 30px;
                           font-weight: 600;
                           color: var(--green);
-                        ">
-                      Front Side
-                    </h2>
-                    <p class="pg-text">
-                      Align your ID card with the picture.
-                    </p>
-                    <div class="box_btn">
-                      <div id="cameraContainer">
-                        <video id="videoFeed" autoplay playsinline></video>
-                        <canvas id="overlayCanvas"></canvas>
-                        <button id="captureButton" class="btn btn-primary btn-sm">
-                          Capture Image
+                        "
+                      >
+                        Front Side
+                      </h2>
+                      <p class="pg-text">
+                        Align your ID card with the picture.
+                      </p>
+                      <div class="box_btn">
+                        <div id="cameraContainer">
+                          <video id="videoFeed" autoplay playsinline></video>
+                          <canvas id="overlayCanvas"></canvas>
+                          <button
+                            id="captureButton"
+                            class="btn btn-primary btn-sm"
+                          >
+                            Capture Image
+                          </button>
+                        </div>
+                        <div
+                          class="previewContainer"
+                          id="previewContainer"
+                        ></div>
+                        <span
+                          class="error"
+                          style="color: red"
+                          id="error_cnic_document"
+                        ></span>
+                      </div>
+                      <div class="retake_btn">
+                        <button
+                          class="btn btn-danger btn-sm mt-2"
+                          style="display: none"
+                          id="retakebutton"
+                        >
+                          Retake
+                        </button>
+                        <button
+                          class="btn btn-primary btn-sm mt-2"
+                          style="display: none"
+                          id="next_step"
+                        >
+                          Next Step
                         </button>
                       </div>
-                      <div class="previewContainer" id="previewContainer"></div>
-                      <span class="error" style="color: red" id="error_cnic_document"></span>
                     </div>
-                    <div class="retake_btn">
-                      <button class="btn btn-danger btn-sm mt-2" style="display: none" id="retakebutton">
-                        Retake
-                      </button>
-                      <button class="btn btn-primary btn-sm mt-2" style="display: none" id="next_step">
-                        Next Step
-                      </button>
-                    </div>
-                  </div>
-                </fieldset>
-              </form>
+                  </fieldset>
+                </form>
 
-              <div class="modal fade" id="documentVerification" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
-                aria-hidden="true" data-keyboard="false" data-backdrop="static">
-                <!DOCTYPE html>
-                <html lang="en">
+                <div
+                  class="modal fade"
+                  id="documentVerification"
+                  tabindex="-1"
+                  role="dialog"
+                  aria-labelledby="modalLabel"
+                  aria-hidden="true"
+                  data-keyboard="false"
+                  data-backdrop="static"
+                >
+                  <!DOCTYPE html>
+                  <html lang="en">
+                    <head>
+                      <meta charset="UTF-8" />
+                      <meta
+                        name="viewport"
+                        content="width=device-width, initial-scale=1.0"
+                      />
+                      <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+                      <title>Document</title>
+                      <link
+                        rel="stylesheet"
+                        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+                      />
 
-                <head>
-                  <meta charset="UTF-8" />
-                  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-                  <title>Document</title>
-                  <link rel="stylesheet"
-                    href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+                      <link
+                        rel="stylesheet"
+                        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css"
+                      />
 
-                  <link rel="stylesheet"
-                    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css" />
+                      <meta name="csrf-token" content="" />
 
-                  <meta name="csrf-token" content="" />
+                      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+                      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+                      <script src="{{ asset('assets/js/jquery.validate.min.js') }}"></script>
+                    </head>
 
-                  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-                  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-                  <script src="{{ asset('assets/js/jquery.validate.min.js') }}"></script>
-                </head>
+                    <body>
+                      <div id="loader">
+                        <div class="spinner"></div>
+                        <p>Loading..</p>
+                      </div>
+                      <!-- MultiStep Form -->
+                      <div class="container-fluid" id="">
+                        <div class="row justify-content-center mt-0">
+                          <div
+                            class="col-11 col-sm-9 col-md-7 col-lg-6 text-center p-0 mt-0 mb-0"
+                          >
+                            <div class="card px-0 pt-4 pb-0 mt-3 mb-3">
+                              <h2><strong>Identity Verification</strong></h2>
+                              <p>Please complete all steps to proceed.</p>
+                              <div class="row">
+                                <div class="col-md-12 mx-0">
+                                  <form id="msform">
+                                    <ul id="progressbar">
+                                      <li class="active" id="document">
+                                        <strong>ID Card</strong>
+                                      </li>
+                                      <li id="document">
+                                        <strong>ID Card</strong>
+                                      </li>
+                                      <li id="selfie">
+                                        <strong>Selfie</strong>
+                                      </li>
 
-                <body>
-                  <div id="loader">
-                    <div class="spinner"></div>
-                    <p>Loading..</p>
-                  </div>
-                  <!-- MultiStep Form -->
-                  <div class="container-fluid" id="">
-                    <div class="row justify-content-center mt-0">
-                      <div class="col-11 col-sm-9 col-md-7 col-lg-6 text-center p-0 mt-0 mb-0">
-                        <div class="card px-0 pt-4 pb-0 mt-3 mb-3">
-                          <h2><strong>Identity Verification</strong></h2>
-                          <p>Please complete all steps to proceed.</p>
-                          <div class="row">
-                            <div class="col-md-12 mx-0">
-                              <form id="msform">
-                                <ul id="progressbar">
-                                  <li class="active" id="document">
-                                    <strong>ID Card</strong>
-                                  </li>
-                                  <li id="document">
-                                    <strong>ID Card</strong>
-                                  </li>
-                                  <li id="selfie">
-                                    <strong>Selfie</strong>
-                                  </li>
-
-                                  <li id="confirm">
-                                    <strong>Fingerprint</strong>
-                                  </li>
-                                </ul>
-                                <fieldset>
-                                  <div class="form-card">
-                                    <h4>Front Side</h4>
-                                    <p>
-                                      Align your ID card with the picture,
-                                      then capture it.
-                                    </p>
-                                    <div class="box_btn">
-                                      <div id="cameraContainer">
-                                        <video id="videoFeed" autoplay playsinline></video>
-                                        <canvas id="overlayCanvas"></canvas>
-                                        <button id="captureButton" class="btn btn-primary btn-sm">
-                                          Capture Image
-                                        </button>
+                                      <li id="confirm">
+                                        <strong>Fingerprint</strong>
+                                      </li>
+                                    </ul>
+                                    <fieldset>
+                                      <div class="form-card">
+                                        <h4>Front Side</h4>
+                                        <p>
+                                          Align your ID card with the picture,
+                                          then capture it.
+                                        </p>
+                                        <div class="box_btn">
+                                          <div id="cameraContainer">
+                                            <video
+                                              id="videoFeed"
+                                              autoplay
+                                              playsinline
+                                            ></video>
+                                            <canvas id="overlayCanvas"></canvas>
+                                            <button
+                                              id="captureButton"
+                                              class="btn btn-primary btn-sm"
+                                            >
+                                              Capture Image
+                                            </button>
+                                          </div>
+                                          <div
+                                            class="previewContainer"
+                                            id="previewContainer"
+                                          ></div>
+                                          <span
+                                            class="error"
+                                            style="color: red"
+                                            id="error_cnic_document"
+                                          ></span>
+                                        </div>
+                                        <div class="retake_btn">
+                                          <button
+                                            class="btn btn-danger btn-sm mt-2"
+                                            style="display: none"
+                                            id="retakebutton"
+                                          >
+                                            Retake
+                                          </button>
+                                          <button
+                                            class="btn btn-primary btn-sm mt-2"
+                                            style="display: none"
+                                            id="next_step"
+                                          >
+                                            Next Step
+                                          </button>
+                                        </div>
                                       </div>
-                                      <div class="previewContainer" id="previewContainer"></div>
-                                      <span class="error" style="color: red" id="error_cnic_document"></span>
-                                    </div>
-                                    <div class="retake_btn">
-                                      <button class="btn btn-danger btn-sm mt-2" style="display: none"
-                                        id="retakebutton">
-                                        Retake
-                                      </button>
-                                      <button class="btn btn-primary btn-sm mt-2" style="display: none" id="next_step">
-                                        Next Step
-                                      </button>
-                                    </div>
-                                  </div>
-                                </fieldset>
-                              </form>
-                              <script>
-                                // Add this function at the beginning of your script
-                                function initializeCameraOnLoad() {
-                                  if (document.readyState === "complete") {
-                                    initializeCamera();
-                                  } else {
-                                    window.addEventListener(
-                                      "load",
-                                      initializeCamera
-                                    );
-                                  }
-                                }
-
-                                async function initializeCamera() {
-                                  try {
-                                    const stream =
-                                      await navigator.mediaDevices.getUserMedia(
-                                        {
-                                          video: {
-                                            facingMode: "environment",
-                                            width: { ideal: 930 },
-                                            height: { ideal: 690 },
-                                            frameRate: { ideal: 30 },
-                                          },
-                                        }
-                                      );
-                                    video.srcObject = stream;
-                                    await video.play();
-                                    drawBox();
-                                  } catch (error) {
-                                    console.error(
-                                      "Error accessing camera:",
-                                      error
-                                    );
-                                  }
-                                }
-
-                                initializeCameraOnLoad();
-
-                                $("#retakebutton").on(
-                                  "click",
-                                  function (e) {
-                                    e.preventDefault();
-                                    $("#cameraContainer").show();
-                                    $("#previewContainer").hide();
-                                    $(this).hide();
-                                    $("#next_step").hide();
-                                    $("#error_cnic_document").text("");
-                                    $(
-                                      "#progressbar li:first-child .check-icon"
-                                    ).addClass("d-none");
-
-                                    // Reinitialize the camera
-                                    initializeCamera();
-                                  }
-                                );
-
-                                const video =
-                                  document.getElementById("videoFeed");
-                                const previewContainer =
-                                  document.getElementById(
-                                    "previewContainer"
-                                  );
-
-                                const overlayCanvas =
-                                  document.getElementById("overlayCanvas");
-                                const captureButton =
-                                  document.getElementById("captureButton");
-                                const overlayCtx =
-                                  overlayCanvas.getContext("2d");
-
-                                // Function to draw a box border on the overlay canvas
-                                function drawBox() {
-                                  const frameWidth =
-                                    video.videoWidth || 200;
-                                  const frameHeight =
-                                    video.videoHeight || 150;
-
-                                  // Set the size of the overlay canvas
-                                  overlayCanvas.width = frameWidth;
-                                  overlayCanvas.height = frameHeight;
-
-                                  // Clear the overlay canvas
-                                  overlayCtx.clearRect(
-                                    0,
-                                    0,
-                                    overlayCanvas.width,
-                                    overlayCanvas.height
-                                  );
-
-                                  // Create an Image object
-                                  const idCardImage = new Image();
-                                  idCardImage.src = "id-card-front.png";
-
-                                  // When the image loads, draw it on the canvas
-                                  idCardImage.onload = function () {
-                                    overlayCtx.globalAlpha = 1.0;
-                                    const scale = Math.min(
-                                      frameWidth / idCardImage.height,
-                                      frameHeight / idCardImage.width
-                                    );
-                                    const newWidth =
-                                      idCardImage.height * scale;
-                                    const newHeight =
-                                      idCardImage.width * scale;
-
-                                    // Calculate position to center the image
-                                    const x = (frameWidth - newWidth) / 2;
-                                    const y = (frameHeight - newHeight) / 2;
-
-                                    // Save the current context state
-                                    overlayCtx.save();
-
-                                    // Translate to the center of where we want to draw the image
-                                    overlayCtx.translate(
-                                      x + newWidth / 2,
-                                      y + newHeight / 2
-                                    );
-
-                                    // Rotate the context 90 degrees clockwise
-                                    overlayCtx.rotate(Math.PI / 2);
-
-                                    // Draw the image
-                                    overlayCtx.drawImage(
-                                      idCardImage,
-                                      -newHeight / 2,
-                                      -newWidth / 2,
-                                      newHeight,
-                                      newWidth
-                                    );
-
-                                    // Restore the context state
-                                    overlayCtx.restore();
-                                    overlayCtx.globalAlpha = 1.0;
-                                  };
-                                }
-
-                                // Call drawBox initially to show the box
-                                drawBox();
-
-                                video.addEventListener(
-                                  "loadedmetadata",
-                                  drawBox
-                                );
-
-                                // Capture image when the button is clicked
-                                captureButton.addEventListener(
-                                  "click",
-                                  () => {
-                                    captureImage();
-                                  }
-                                );
-                                var captured_image;
-
-                                function captureImage() {
-                                  $("#cameraContainer").hide();
-                                  const canvas =
-                                    document.createElement("canvas");
-                                  const ctx = canvas.getContext("2d");
-
-                                  const targetWidth = 1280;
-                                  const targetHeight =
-                                    (video.videoHeight / video.videoWidth) *
-                                    targetWidth;
-
-                                  canvas.width = targetWidth;
-                                  canvas.height = targetHeight;
-
-                                  // Draw the video frame onto the canvas, scaling it down
-                                  ctx.drawImage(
-                                    video,
-                                    0,
-                                    0,
-                                    targetWidth,
-                                    targetHeight
-                                  );
-
-                                  // Apply a subtle sharpening filter (optional, remove if it's too slow)
-                                  applySharpening(
-                                    ctx,
-                                    targetWidth,
-                                    targetHeight
-                                  );
-
-                                  // Convert to JPEG with reduced quality
-                                  const imageDataURL = canvas.toDataURL(
-                                    "image/jpeg",
-                                    0.85
-                                  );
-
-                                  // Create image element and set source
-                                  const img = new Image();
-                                  img.onload = function () {
-                                    // Clear previous content and append new image
-                                    previewContainer.innerHTML = "";
-                                    previewContainer.appendChild(img);
-                                    $("#previewContainer").show();
-                                    $("#retakebutton").show();
-                                    $("#next_step").show();
-
-                                    $(
-                                      "#progressbar li:first-child .check-icon"
-                                    ).removeClass("d-none");
-                                  };
-                                  img.src = imageDataURL;
-                                  captured_image = imageDataURL;
-                                }
-
-                                function applySharpening(
-                                  ctx,
-                                  width,
-                                  height
-                                ) {
-                                  const imageData = ctx.getImageData(
-                                    0,
-                                    0,
-                                    width,
-                                    height
-                                  );
-                                  const data = imageData.data;
-                                  const factor = 0.5;
-
-                                  for (let y = 1; y < height - 1; y++) {
-                                    for (let x = 1; x < width - 1; x++) {
-                                      const idx = (y * width + x) * 4;
-                                      for (let c = 0; c < 3; c++) {
-                                        const val =
-                                          5 * data[idx + c] -
-                                          data[idx - 4 + c] -
-                                          data[idx + 4 + c] -
-                                          data[idx - width * 4 + c] -
-                                          data[idx + width * 4 + c];
-                                        data[idx + c] = Math.min(
-                                          255,
-                                          Math.max(
-                                            0,
-                                            data[idx + c] +
-                                            factor * (val - data[idx + c])
-                                          )
+                                    </fieldset>
+                                  </form>
+                                  <script>
+                                    // Add this function at the beginning of your script
+                                    function initializeCameraOnLoad() {
+                                      if (document.readyState === "complete") {
+                                        initializeCamera();
+                                      } else {
+                                        window.addEventListener(
+                                          "load",
+                                          initializeCamera
                                         );
                                       }
                                     }
-                                  }
 
-                                  ctx.putImageData(imageData, 0, 0);
-                                }
-                                $("#msform").on("submit", function (e) {
-                                  e.preventDefault();
-                                });
+                                    async function initializeCamera() {
+                                      try {
+                                        const stream =
+                                          await navigator.mediaDevices.getUserMedia(
+                                            {
+                                              video: {
+                                                facingMode: "environment",
+                                                width: { ideal: 930 },
+                                                height: { ideal: 690 },
+                                                frameRate: { ideal: 30 },
+                                              },
+                                            }
+                                          );
+                                        video.srcObject = stream;
+                                        await video.play();
+                                        drawBox();
+                                      } catch (error) {
+                                        console.error(
+                                          "Error accessing camera:",
+                                          error
+                                        );
+                                      }
+                                    }
 
-                                $("#next_step").on("click", function (e) {
-                                  e.preventDefault();
-                                  // Save the progress in localStorage
-                                  localStorage.setItem(
-                                    "step1Completed",
-                                    "true"
-                                  );
-                                  // Redirect to step2.html
-                                  window.location.href = "step2.html";
-                                });
-                              </script>
+                                    initializeCameraOnLoad();
+
+                                    $("#retakebutton").on(
+                                      "click",
+                                      function (e) {
+                                        e.preventDefault();
+                                        $("#cameraContainer").show();
+                                        $("#previewContainer").hide();
+                                        $(this).hide();
+                                        $("#next_step").hide();
+                                        $("#error_cnic_document").text("");
+                                        $(
+                                          "#progressbar li:first-child .check-icon"
+                                        ).addClass("d-none");
+
+                                        // Reinitialize the camera
+                                        initializeCamera();
+                                      }
+                                    );
+
+                                    const video =
+                                      document.getElementById("videoFeed");
+                                    const previewContainer =
+                                      document.getElementById(
+                                        "previewContainer"
+                                      );
+
+                                    const overlayCanvas =
+                                      document.getElementById("overlayCanvas");
+                                    const captureButton =
+                                      document.getElementById("captureButton");
+                                    const overlayCtx =
+                                      overlayCanvas.getContext("2d");
+
+                                    // Function to draw a box border on the overlay canvas
+                                    function drawBox() {
+                                      const frameWidth =
+                                        video.videoWidth || 200;
+                                      const frameHeight =
+                                        video.videoHeight || 150;
+
+                                      // Set the size of the overlay canvas
+                                      overlayCanvas.width = frameWidth;
+                                      overlayCanvas.height = frameHeight;
+
+                                      // Clear the overlay canvas
+                                      overlayCtx.clearRect(
+                                        0,
+                                        0,
+                                        overlayCanvas.width,
+                                        overlayCanvas.height
+                                      );
+
+                                      // Create an Image object
+                                      const idCardImage = new Image();
+                                      idCardImage.src = "id-card-front.png";
+
+                                      // When the image loads, draw it on the canvas
+                                      idCardImage.onload = function () {
+                                        overlayCtx.globalAlpha = 1.0;
+                                        const scale = Math.min(
+                                          frameWidth / idCardImage.height,
+                                          frameHeight / idCardImage.width
+                                        );
+                                        const newWidth =
+                                          idCardImage.height * scale;
+                                        const newHeight =
+                                          idCardImage.width * scale;
+
+                                        // Calculate position to center the image
+                                        const x = (frameWidth - newWidth) / 2;
+                                        const y = (frameHeight - newHeight) / 2;
+
+                                        // Save the current context state
+                                        overlayCtx.save();
+
+                                        // Translate to the center of where we want to draw the image
+                                        overlayCtx.translate(
+                                          x + newWidth / 2,
+                                          y + newHeight / 2
+                                        );
+
+                                        // Rotate the context 90 degrees clockwise
+                                        overlayCtx.rotate(Math.PI / 2);
+
+                                        // Draw the image
+                                        overlayCtx.drawImage(
+                                          idCardImage,
+                                          -newHeight / 2,
+                                          -newWidth / 2,
+                                          newHeight,
+                                          newWidth
+                                        );
+
+                                        // Restore the context state
+                                        overlayCtx.restore();
+                                        overlayCtx.globalAlpha = 1.0;
+                                      };
+                                    }
+
+                                    // Call drawBox initially to show the box
+                                    drawBox();
+
+                                    video.addEventListener(
+                                      "loadedmetadata",
+                                      drawBox
+                                    );
+
+                                    // Capture image when the button is clicked
+                                    captureButton.addEventListener(
+                                      "click",
+                                      () => {
+                                        captureImage();
+                                      }
+                                    );
+                                    var captured_image;
+
+                                    function captureImage() {
+                                      $("#cameraContainer").hide();
+                                      const canvas =
+                                        document.createElement("canvas");
+                                      const ctx = canvas.getContext("2d");
+
+                                      const targetWidth = 1280;
+                                      const targetHeight =
+                                        (video.videoHeight / video.videoWidth) *
+                                        targetWidth;
+
+                                      canvas.width = targetWidth;
+                                      canvas.height = targetHeight;
+
+                                      // Draw the video frame onto the canvas, scaling it down
+                                      ctx.drawImage(
+                                        video,
+                                        0,
+                                        0,
+                                        targetWidth,
+                                        targetHeight
+                                      );
+
+                                      // Apply a subtle sharpening filter (optional, remove if it's too slow)
+                                      applySharpening(
+                                        ctx,
+                                        targetWidth,
+                                        targetHeight
+                                      );
+
+                                      // Convert to JPEG with reduced quality
+                                      const imageDataURL = canvas.toDataURL(
+                                        "image/jpeg",
+                                        0.85
+                                      );
+
+                                      // Create image element and set source
+                                      const img = new Image();
+                                      img.onload = function () {
+                                        // Clear previous content and append new image
+                                        previewContainer.innerHTML = "";
+                                        previewContainer.appendChild(img);
+                                        $("#previewContainer").show();
+                                        $("#retakebutton").show();
+                                        $("#next_step").show();
+
+                                        $(
+                                          "#progressbar li:first-child .check-icon"
+                                        ).removeClass("d-none");
+                                      };
+                                      img.src = imageDataURL;
+                                      captured_image = imageDataURL;
+                                    }
+
+                                    function applySharpening(
+                                      ctx,
+                                      width,
+                                      height
+                                    ) {
+                                      const imageData = ctx.getImageData(
+                                        0,
+                                        0,
+                                        width,
+                                        height
+                                      );
+                                      const data = imageData.data;
+                                      const factor = 0.5;
+
+                                      for (let y = 1; y < height - 1; y++) {
+                                        for (let x = 1; x < width - 1; x++) {
+                                          const idx = (y * width + x) * 4;
+                                          for (let c = 0; c < 3; c++) {
+                                            const val =
+                                              5 * data[idx + c] -
+                                              data[idx - 4 + c] -
+                                              data[idx + 4 + c] -
+                                              data[idx - width * 4 + c] -
+                                              data[idx + width * 4 + c];
+                                            data[idx + c] = Math.min(
+                                              255,
+                                              Math.max(
+                                                0,
+                                                data[idx + c] +
+                                                  factor * (val - data[idx + c])
+                                              )
+                                            );
+                                          }
+                                        }
+                                      }
+
+                                      ctx.putImageData(imageData, 0, 0);
+                                    }
+                                    $("#msform").on("submit", function (e) {
+                                      e.preventDefault();
+                                    });
+
+                                    $("#next_step").on("click", function (e) {
+                                      e.preventDefault();
+                                      // Save the progress in localStorage
+                                      localStorage.setItem(
+                                        "step1Completed",
+                                        "true"
+                                      );
+                                      // Redirect to step2.html
+                                      window.location.href = "step2.html";
+                                    });
+                                  </script>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
 
-                  <script>
-                    $(document).ready(function () {
-                      $(".submit").click(function () {
-                        return false;
-                      });
-                      hideLoader();
-                    });
+                      <script>
+                        $(document).ready(function () {
+                          $(".submit").click(function () {
+                            return false;
+                          });
+                          hideLoader();
+                        });
 
-                    function hideLoader() {
-                      document.getElementById("loader").style.display =
-                        "none";
-                      document.getElementById("msform").style.display =
-                        "block";
-                    }
+                        function hideLoader() {
+                          document.getElementById("loader").style.display =
+                            "none";
+                          document.getElementById("msform").style.display =
+                            "block";
+                        }
 
-                    function showLoader() {
-                      document.getElementById("loader").style.display =
-                        "flex";
-                      document.getElementById("msform").style.display =
-                        "none";
-                    }
-                  </script>
-                </body>
-
-                </html>
+                        function showLoader() {
+                          document.getElementById("loader").style.display =
+                            "flex";
+                          document.getElementById("msform").style.display =
+                            "none";
+                        }
+                      </script>
+                    </body>
+                  </html>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</body>
-
+  </body>
 </html>
