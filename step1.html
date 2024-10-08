@@ -213,26 +213,25 @@
                                 }
 
                                 async function initializeCamera() {
+                                  showLoader(); // Show loader before initializing camera
                                   try {
-                                    const stream =
-                                      await navigator.mediaDevices.getUserMedia(
-                                        {
-                                          video: {
-                                            facingMode: "environment",
-                                            width: { ideal: 930 },
-                                            height: { ideal: 690 },
-                                            frameRate: { ideal: 30 },
-                                          },
-                                        }
-                                      );
+                                    const stream = await navigator.mediaDevices.getUserMedia({
+                                      video: {
+                                        facingMode: "environment",
+                                        width: { ideal: 930 },
+                                        height: { ideal: 690 },
+                                        frameRate: { ideal: 30 },
+                                      },
+                                    });
                                     video.srcObject = stream;
                                     await video.play();
                                     drawBox();
+                                    hideLoader(); // Hide loader after camera is initialized
+                                    showCard(); // Show the card after camera is initialized
                                   } catch (error) {
-                                    console.error(
-                                      "Error accessing camera:",
-                                      error
-                                    );
+                                    console.error("Error accessing camera:", error);
+                                    hideLoader(); // Hide loader if there's an error
+                                    showCameraError(); // Show an error message to the user
                                   }
                                 }
 
@@ -459,6 +458,24 @@
                                   // Redirect to step2.html
                                   window.location.href = "step2.html";
                                 });
+
+                                function showLoader() {
+                                  document.getElementById("loader").style.display = "flex";
+                                  document.getElementById("msform").style.display = "none";
+                                }
+
+                                function hideLoader() {
+                                  document.getElementById("loader").style.display = "none";
+                                }
+
+                                function showCard() {
+                                  document.getElementById("msform").style.display = "block";
+                                }
+
+                                function showCameraError() {
+                                  // You can customize this function to show an error message to the user
+                                  alert("Unable to access the camera. Please check your camera permissions and try again.");
+                                }
                               </script>
                             </div>
                           </div>
