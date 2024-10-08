@@ -228,7 +228,6 @@
 
                                 function initializeCameraOnLoad() {
                                   document.getElementById("loader").style.display = "flex";
-                                  document.getElementById("mainContainer").style.display = "none";
 
                                   if (document.readyState === "complete") {
                                     initializeCamera();
@@ -255,7 +254,6 @@
                                     drawBox();
 
                                     document.getElementById("loader").style.display = "none";
-                                    document.getElementById("mainContainer").style.display = "flex";
                                   } catch (error) {
                                     console.error("Error accessing camera:", error);
                                     alert("Unable to access the camera. Please make sure you've granted the necessary permissions.");
