@@ -93,7 +93,7 @@
     <p>Loading...</p>
   </div>
   <!-- MultiStep Form -->
-  <div class="container d-flex align-items-center" style="min-height: 100vh" id="">
+  <div class="container d-flex align-items-center" style="min-height: 100vh; display: none;" id="mainContainer">
     <div class="row justify-content-center">
       <div class="col-12 col-sm-9 col-md-7 col-lg-6 text-center p-2 p-md-0 mt-0 mb-0">
         <div class="card">
@@ -275,16 +275,24 @@
                   drawBox
                 );
 
+                let currentStream;
+
                 function initializeCameraOnLoad() {
+                  document.getElementById("loader").style.display = "flex";
+                  document.getElementById("mainContainer").style.display = "none";
+
                   if (document.readyState === "complete") {
                     initializeCamera();
                   } else {
-                    window.addEventListener('load', initializeCamera);
+                    window.addEventListener("load", initializeCamera);
                   }
                 }
 
                 async function initializeCamera() {
                   try {
+                    if (currentStream) {
+                      currentStream.getTracks().forEach(track => track.stop());
+                    }
                     const stream = await navigator.mediaDevices.getUserMedia({
                       video: {
                         facingMode: "environment",
@@ -293,15 +301,30 @@
                         frameRate: { ideal: 30 },
                       },
                     });
+                    currentStream = stream;
                     video.srcObject = stream;
                     await video.play();
                     drawBox();
+
+                    document.getElementById("loader").style.display = "none";
+                    document.getElementById("mainContainer").style.display = "flex";
                   } catch (error) {
                     console.error("Error accessing camera:", error);
+                    alert("Unable to access the camera. Please make sure you've granted the necessary permissions.");
                   }
                 }
 
-                let currentStream;
+                // Handle visibility change
+                document.addEventListener("visibilitychange", function () {
+                  if (document.visibilityState === "visible") {
+                    initializeCamera();
+                  } else {
+                    if (currentStream) {
+                      currentStream.getTracks().forEach(track => track.stop());
+                    }
+                  }
+                });
+
                 initializeCameraOnLoad();
 
                 captureButton.addEventListener(
