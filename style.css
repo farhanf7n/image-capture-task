@@ -345,7 +345,6 @@ select.list-dt:focus {
   margin-bottom: 16px;
   overflow: hidden;
   color: lightgrey;
-  margin-top: -23px;
 }
 
 #progressbar li {
@@ -500,7 +499,6 @@ select.list-dt:focus {
   margin-bottom: 16px;
   overflow: hidden;
   color: lightgrey;
-  margin-top: -23px;
 }
 
 /*Icons in the ProgressBar*/
@@ -776,7 +774,6 @@ select.list-dt:focus {
   margin-bottom: 16px;
   overflow: hidden;
   color: lightgrey;
-  margin-top: -23px;
 }
 
 /*Icons in the ProgressBar*/
@@ -799,7 +796,6 @@ select.list-dt:focus {
   font-family: FontAwesome;
   content: "\f00c";
 }
-
 
 /*ProgressBar connectors*/
 #progressbar li:after {
@@ -1216,7 +1212,6 @@ select.list-dt:focus {
   margin-bottom: 16px;
   overflow: hidden;
   color: var(--green);
-  margin-top: -23px;
 }
 
 /*Icons in the ProgressBar*/
