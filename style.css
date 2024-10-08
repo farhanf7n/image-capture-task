@@ -325,7 +325,7 @@ select.list-dt:focus {
 
 /*The background card*/
 .card {
-  padding: 30px 10px !important;
+  /* padding: 30px 10px !important; */
   border-radius: 8px !important;
   border: 2px dashed var(--light-gray) !important;
   /* box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px !important; */
