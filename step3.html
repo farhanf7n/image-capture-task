@@ -117,7 +117,7 @@
         </div>
     </div>
     <!-- MultiStep Form -->
-    <div class="container d-flex align-items-center" style="min-height: 100vh; display: none;" id="mainContainer">
+    <div class="container d-flex align-items-center" style="min-height: 100vh" id="">
         <div class="row justify-content-center m-auto">
             <div class="col-12 col-sm-9 col-md-7 col-lg-6 text-center p-2 p-md-0 mt-0 mb-0">
                 <div class="card px-0 pt-4 pb-0 m-auto">
@@ -204,29 +204,26 @@
                                             // Hide the modal and start the camera when the Continue button is clicked
                                             continueBtn.onclick = function () {
                                                 modal.style.display = "none";
-                                                initializeCameraOnLoad();
+                                                main().then(() => {
+                                                    startCountdownAndRecording();
+                                                });
                                             };
                                         }
                                     );
                                     let mediaRecorder;
-                                    let currentStream;
+                                    var videoData;
+                                    async function main() {
+                                        const videoLive = document.getElementById('videoLive');
+                                        const counter = document.getElementById('counter');
+                                        const instruction = document.getElementById('instruction');
+                                        const leftArrow = document.querySelector('.left-arrow');
+                                        const rightArrow = document.querySelector('.right-arrow');
+                                        let chunks = [];
+                                        let countdownInterval;
+                                        let countdownSeconds = 4;
+                                        const recordingDuration = 6; // Define the recording duration in seconds
 
-                                    function initializeCameraOnLoad() {
-                                        document.getElementById("loader").style.display = "flex";
-                                        document.getElementById("mainContainer").style.display = "none";
-
-                                        if (document.readyState === "complete") {
-                                            initializeCamera();
-                                        } else {
-                                            window.addEventListener("load", initializeCamera);
-                                        }
-                                    }
-
-                                    async function initializeCamera() {
                                         try {
-                                            if (currentStream) {
-                                                currentStream.getTracks().forEach(track => track.stop());
-                                            }
                                             const stream = await navigator.mediaDevices.getUserMedia({
                                                 video: {
                                                     facingMode: "user",
@@ -235,20 +232,6 @@
                                                 },
                                                 audio: true,
                                             });
-                                            currentStream = stream;
-
-                                            const videoLive = document.getElementById('videoLive');
-                                            videoLive.srcObject = stream;
-                                            videoLive.play();
-
-                                            if (!MediaRecorder.isTypeSupported('video/webm')) {
-                                                mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/mp4' });
-                                            } else {
-                                                mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
-                                            }
-
-                                            document.getElementById("loader").style.display = "none";
-                                            document.getElementById("mainContainer").style.display = "flex";
 
                                             // Remove the fd-margin class from the fieldset
                                             document.querySelector('fieldset').classList.remove('fd-margin');
@@ -256,28 +239,31 @@
                                             // Flip the video horizontally
                                             videoLive.style.transform = 'scaleX(-1)';
 
-                                            startCountdownAndRecording();
+                                            videoLive.srcObject = stream;
+                                            videoLive.play();
+
+                                            if (!MediaRecorder.isTypeSupported('video/webm')) {
+                                                mediaRecorder = new MediaRecorder(stream, {
+                                                    mimeType: 'video/mp4',
+                                                });
+                                            } else {
+                                                mediaRecorder = new MediaRecorder(stream, {
+                                                    mimeType: 'video/webm',
+                                                });
+                                            }
+
+                                            // The countdown and recording logic will be moved to a separate function
+
+                                            mediaRecorder.addEventListener('dataavailable', event => {
+                                                videoRecorded.src = URL.createObjectURL(event.data)
+                                                videoData = event.data;
+                                                $('#next_btn').show();
+                                                $('#retakeBtn').show();
+                                            })
                                         } catch (error) {
                                             console.error("Error accessing camera:", error);
-                                            alert("Unable to access the camera. Please make sure you've granted the necessary permissions.");
                                         }
                                     }
-
-                                    // Handle visibility change
-                                    document.addEventListener("visibilitychange", function () {
-                                        if (document.visibilityState === "visible") {
-                                            initializeCamera();
-                                        } else {
-                                            if (currentStream) {
-                                                currentStream.getTracks().forEach(track => track.stop());
-                                            }
-                                        }
-                                    });
-
-                                    initializeCameraOnLoad();
-
-                                    var videoData;
-
                                     $("#next_btn").on("click", function () {
                                         // Show the check icon for Selfie
                                         $('#progressbar li:nth-child(3) .check-icon').removeClass('d-none');
@@ -321,7 +307,7 @@
                                         $('#progressbar li:nth-child(3) .check-icon').addClass('d-none');
 
                                         // Reinitialize the camera
-                                        initializeCamera();
+                                        main();
                                     });
 
                                     function updateProgressBar(startTime, duration) {
